@@ -46,6 +46,10 @@ app.use((req, res, next) => {
   next();
 });
 
+app.get('/favicon.ico', (req, res) => {
+  res.redirect(301, '/images/logo-binary.png');
+});
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(publicUploads, express.static(uploadRoot));
 
