@@ -64,12 +64,18 @@ router.post('/signup', async (req, res) => {
       emailVerifyExpires: new Date(Date.now() + VERIFY_HOURS * 60 * 60 * 1000)
     });
 
-    await sendVerificationEmail(email, name, token).catch((e) => console.error(e));
-
-    req.flash(
-      'success',
-      'Account created. Check your email for a verification link before signing in.'
-    );
+    const mailResult = await sendVerificationEmail(email, name, token);
+    if (mailResult && mailResult.sent) {
+      req.flash(
+        'success',
+        'Account created. Check your email for a verification link before signing in.'
+      );
+    } else {
+      req.flash(
+        'error',
+        'Your account was created, but the verification email could not be sent. Mail is not configured or the server rejected the send. Contact support, or ask an admin to fix SMTP settings in .env.'
+      );
+    }
     res.redirect('/auth/verify-pending');
   } catch (e) {
     console.error(e);
@@ -171,7 +177,7 @@ router.post('/forgot-password', async (req, res) => {
       user.passwordResetToken = token;
       user.passwordResetExpires = new Date(Date.now() + RESET_HOURS * 60 * 60 * 1000);
       await user.save();
-      await sendPasswordResetEmail(email, user.name, token).catch((e) => console.error(e));
+      await sendPasswordResetEmail(email, user.name, token);
     }
     req.flash(
       'success',

@@ -3,6 +3,9 @@
     <div class="auth-card">
         <h1>Check your email</h1>
         <p class="auth-lead">We sent you a verification link. Open it to activate your account, then return here to sign in.</p>
+        <% if (typeof errorMsg !== 'undefined' && errorMsg && errorMsg.length) { %>
+        <div class="auth-flash err"><%= errorMsg[0] %></div>
+        <% } %>
         <% if (typeof successMsg !== 'undefined' && successMsg && successMsg.length) { %>
         <div class="auth-flash ok"><%= successMsg[0] %></div>
         <% } %>

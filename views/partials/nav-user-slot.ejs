@@ -1,29 +1,33 @@
 <% var cu = typeof currentUser !== 'undefined' && currentUser; var unread = typeof unreadNotificationCount !== 'undefined' ? unreadNotificationCount : 0; %>
-<% if (!cu) { %>
-<li class="nav-auth-li"><a href="/auth/login" class="nav-auth-login">Log in</a></li>
-<li class="nav-auth-li"><a href="/auth/signup" class="nav-auth-signup">Sign up</a></li>
-<% } else { %>
-<% var parts = String(cu.name || cu.email || '?').trim().split(/\s+/); var ini = (parts[0] && parts[0][0] ? parts[0][0] : '') + (parts[1] && parts[1][0] ? parts[1][0] : (parts[0][1] || '')); ini = ini.toUpperCase().slice(0, 2) || '?'; %>
-<li class="nav-auth-li nav-notify-wrap">
-    <button type="button" class="nav-icon-btn" id="notifyOpenBtn" aria-label="Notifications" aria-expanded="false">
-        <i class="fas fa-bell"></i>
-        <% if (unread > 0) { %><span class="nav-badge" id="navNotifyBadge"><%= unread > 99 ? '99+' : unread %></span><% } %>
-    </button>
-</li>
-<li class="nav-auth-li nav-profile-wrap">
-    <button type="button" class="nav-avatar-btn" id="profileOpenBtn" aria-expanded="false" aria-label="Account menu" aria-haspopup="true">
-        <span class="nav-avatar-initials"><%= ini %></span>
-    </button>
-    <div class="nav-profile-dropdown" id="profileDropdown" hidden>
-        <div class="nav-dd-head">
-            <strong><%= cu.name %></strong>
-            <span><%= cu.email %></span>
+<li class="nav-user-cluster">
+    <div class="nav-user-inner">
+        <% if (!cu) { %>
+        <a href="/auth/login" class="nav-auth-login">Log in</a>
+        <a href="/auth/signup" class="nav-auth-signup">Sign up</a>
+        <% } else { %>
+        <% var parts = String(cu.name || cu.email || '?').trim().split(/\s+/); var ini = (parts[0] && parts[0][0] ? parts[0][0] : '') + (parts[1] && parts[1][0] ? parts[1][0] : (parts[0][1] || '')); ini = ini.toUpperCase().slice(0, 2) || '?'; %>
+        <div class="nav-notify-wrap">
+            <button type="button" class="nav-icon-btn" id="notifyOpenBtn" aria-label="Notifications" aria-expanded="false">
+                <i class="fas fa-bell"></i>
+                <% if (unread > 0) { %><span class="nav-badge" id="navNotifyBadge"><%= unread > 99 ? '99+' : unread %></span><% } %>
+            </button>
         </div>
-        <a href="/account/settings">Profile &amp; settings</a>
-        <a href="/account/purchases">Recent purchases</a>
-        <form method="post" action="/auth/logout" class="nav-dd-logout">
-            <button type="submit">Sign out</button>
-        </form>
+        <div class="nav-profile-wrap">
+            <button type="button" class="nav-avatar-btn" id="profileOpenBtn" aria-expanded="false" aria-label="Account menu" aria-haspopup="true">
+                <span class="nav-avatar-initials"><%= ini %></span>
+            </button>
+            <div class="nav-profile-dropdown" id="profileDropdown" hidden>
+                <div class="nav-dd-head">
+                    <strong><%= cu.name %></strong>
+                    <span><%= cu.email %></span>
+                </div>
+                <a href="/account/settings">Profile &amp; settings</a>
+                <a href="/account/purchases">Recent purchases</a>
+                <form method="post" action="/auth/logout" class="nav-dd-logout">
+                    <button type="submit">Sign out</button>
+                </form>
+            </div>
+        </div>
+        <% } %>
     </div>
 </li>
-<% } %>
