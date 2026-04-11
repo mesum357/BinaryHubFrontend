@@ -500,7 +500,7 @@
         .ceo-img {
             width: 100px; height: 100px;
             border-radius: 50%; border: 4px solid var(--white);
-            position: absolute; bottom: -50px; left: 50%;
+            position: absolute; bottom: 170px; left: 50%;
             transform: translateX(-50%);
             box-shadow: 0 8px 30px rgba(0,0,0,0.15);
             transition: var(--transition);
@@ -531,6 +531,26 @@
             font-size: 0.9rem; transition: 0.3s; text-decoration: none;
         }
         .social-circle:hover { background: var(--orange); color: var(--white); transform: scale(1.1); }
+
+        .team-card-linkedin {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            margin-top: 12px;
+            border-radius: 50%;
+            background: #0a66c2;
+            color: #fff !important;
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .team-card-linkedin:hover {
+            transform: scale(1.08);
+            box-shadow: 0 4px 14px rgba(10, 102, 194, 0.45);
+            color: #fff !important;
+        }
 
         /* --- Developer Cards --- */
         .dev-sub { background: var(--gray-light); }
@@ -874,6 +894,9 @@
                         <div class="ceo-body">
                             <h3 class="ceo-name space-grotesk"><%= m.name %></h3>
                             <span class="ceo-role"><%= m.department %></span>
+                            <% if (m.linkedinUrl) { %>
+                            <a href="<%= m.linkedinUrl %>" class="team-card-linkedin" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile for <%= m.name %>"><i class="fa-brands fa-linkedin-in"></i></a>
+                            <% } %>
                         </div>
                     </div>
                     <% }); %>
@@ -901,6 +924,9 @@
                             <div>
                                 <h4 class="space-grotesk"><%= m.name %></h4>
                                 <span class="dev-role-badge">Developer</span>
+                                <% if (m.linkedinUrl) { %>
+                                <a href="<%= m.linkedinUrl %>" class="team-card-linkedin" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile for <%= m.name %>"><i class="fa-brands fa-linkedin-in"></i></a>
+                                <% } %>
                             </div>
                         </div>
                     </div>
@@ -931,6 +957,9 @@
                         <div class="design-body">
                             <h4 class="space-grotesk"><%= m.name %></h4>
                             <span class="founder-role">Designer</span>
+                            <% if (m.linkedinUrl) { %>
+                            <a href="<%= m.linkedinUrl %>" class="team-card-linkedin" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile for <%= m.name %>"><i class="fa-brands fa-linkedin-in"></i></a>
+                            <% } %>
                         </div>
                     </div>
                     <% }); %>
@@ -959,6 +988,9 @@
                             <div>
                                 <h4 class="space-grotesk"><%= m.name %></h4>
                                 <span style="font-size: 0.8rem; color: var(--gray-text);">Marketer</span>
+                                <% if (m.linkedinUrl) { %>
+                                <a href="<%= m.linkedinUrl %>" class="team-card-linkedin" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile for <%= m.name %>"><i class="fa-brands fa-linkedin-in"></i></a>
+                                <% } %>
                             </div>
                         </div>
                     </div>
@@ -983,6 +1015,9 @@
                             <% if (m.image) { %><img src="<%= m.image %>" alt="" style="width:80px;height:80px;border-radius:50%;object-fit:cover;margin-bottom:12px;"><% } %>
                             <h4 class="space-grotesk"><%= m.name %></h4>
                             <span class="founder-role"><%= m.department %></span>
+                            <% if (m.linkedinUrl) { %>
+                            <a href="<%= m.linkedinUrl %>" class="team-card-linkedin" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile for <%= m.name %>"><i class="fa-brands fa-linkedin-in"></i></a>
+                            <% } %>
                         </div>
                     </div>
                     <% }); %>
