@@ -1,0 +1,12 @@
+<%- include('partials/auth-layout-start') %>
+<div class="auth-shell">
+    <div class="auth-card">
+        <h1>Check your email</h1>
+        <p class="auth-lead">We sent you a verification link. Open it to activate your account, then return here to sign in.</p>
+        <% if (typeof successMsg !== 'undefined' && successMsg && successMsg.length) { %>
+        <div class="auth-flash ok"><%= successMsg[0] %></div>
+        <% } %>
+        <p class="auth-footer"><a href="/auth/login">Go to sign in</a> · <a href="/">Home</a></p>
+    </div>
+</div>
+<%- include('partials/auth-layout-end') %>

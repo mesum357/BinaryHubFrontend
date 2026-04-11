@@ -5,6 +5,8 @@ const mongoose = require('mongoose');
 const { connectDatabase } = require('./config/db');
 const flash = require('connect-flash');
 const session = require('express-session');
+const passport = require('./config/passport');
+const loadUserLocals = require('./middleware/loadUserLocals');
 
 const {
   Course,
@@ -41,12 +43,22 @@ app.use(
     cookie: { maxAge: 86400000 }
   })
 );
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(flash());
 app.use((req, res, next) => {
   res.locals.successMsg = req.flash('success');
   res.locals.errorMsg = req.flash('error');
   next();
 });
+app.use(loadUserLocals);
+
+const authRoutes = require('./routes/auth');
+const accountRoutes = require('./routes/account');
+const apiRoutes = require('./routes/api');
+app.use('/auth', authRoutes);
+app.use('/account', accountRoutes);
+app.use('/api', apiRoutes);
 
 app.get('/favicon.ico', (req, res) => {
   res.redirect(301, '/images/logo-binary.png');
@@ -160,6 +172,8 @@ app.post('/courses/enroll', (req, res, next) => {
       courseRef = courseId;
     }
 
+    const userRef = req.user && req.user._id ? req.user._id : null;
+
     await PaymentRequest.create({
       studentName,
       email,
@@ -171,6 +185,7 @@ app.post('/courses/enroll', (req, res, next) => {
       amount: parseFloat(String(amount).replace(/[^\d.]/g, '')) || 0,
       status: 'pending',
       course: courseRef,
+      user: userRef,
       courseName: courseName || '',
       education: education || '',
       city: city || ''
@@ -183,6 +198,7 @@ app.post('/courses/enroll', (req, res, next) => {
       education: education || '',
       city: city || '',
       course: courseRef,
+      user: userRef,
       courseName: courseName || ''
     });
 

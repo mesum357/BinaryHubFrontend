@@ -1,0 +1,30 @@
+<%- include('partials/auth-layout-start') %>
+<div class="auth-shell account-wide">
+    <div class="auth-card account-card">
+        <h1>Account settings</h1>
+        <p class="auth-lead">Update your profile and password. Email cannot be changed here.</p>
+        <% if (typeof errorMsg !== 'undefined' && errorMsg && errorMsg.length) { %>
+        <div class="auth-flash err"><%= errorMsg[0] %></div>
+        <% } %>
+        <% if (typeof successMsg !== 'undefined' && successMsg && successMsg.length) { %>
+        <div class="auth-flash ok"><%= successMsg[0] %></div>
+        <% } %>
+        <h2>Profile</h2>
+        <form class="auth-form" method="post" action="/account/settings">
+            <label for="name">Display name</label>
+            <input type="text" id="name" name="name" required value="<%= accountUser && accountUser.name ? accountUser.name : '' %>" autocomplete="name">
+            <p style="color:var(--auth-muted);font-size:0.85rem;margin:-8px 0 18px;">Email: <strong style="color:var(--auth-text);"><%= accountUser && accountUser.email ? accountUser.email : '' %></strong></p>
+            <h2>Change password</h2>
+            <p style="color:var(--auth-muted);font-size:0.85rem;margin:-8px 0 12px;">Leave new password blank to keep your current password.</p>
+            <label for="currentPassword">Current password</label>
+            <input type="password" id="currentPassword" name="currentPassword" autocomplete="current-password" placeholder="Required only if changing password">
+            <label for="newPassword">New password</label>
+            <input type="password" id="newPassword" name="newPassword" autocomplete="new-password" minlength="8" placeholder="At least 8 characters">
+            <label for="newPasswordConfirm">Confirm new password</label>
+            <input type="password" id="newPasswordConfirm" name="newPasswordConfirm" autocomplete="new-password" minlength="8">
+            <button type="submit" class="btn-primary">Save changes</button>
+        </form>
+        <p class="auth-footer"><a href="/account/purchases">Recent purchases</a> · <a href="/">Home</a></p>
+    </div>
+</div>
+<%- include('partials/auth-layout-end') %>

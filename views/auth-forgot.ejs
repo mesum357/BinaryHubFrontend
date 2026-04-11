@@ -1,0 +1,20 @@
+<%- include('partials/auth-layout-start') %>
+<div class="auth-shell">
+    <div class="auth-card">
+        <h1>Reset password</h1>
+        <p class="auth-lead">Enter the email for your account. If it exists, we will send a link to choose a new password.</p>
+        <% if (typeof errorMsg !== 'undefined' && errorMsg && errorMsg.length) { %>
+        <div class="auth-flash err"><%= errorMsg[0] %></div>
+        <% } %>
+        <% if (typeof successMsg !== 'undefined' && successMsg && successMsg.length) { %>
+        <div class="auth-flash ok"><%= successMsg[0] %></div>
+        <% } %>
+        <form class="auth-form" method="post" action="/auth/forgot-password">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required autocomplete="email" placeholder="you@example.com">
+            <button type="submit" class="btn-primary">Send reset link</button>
+        </form>
+        <p class="auth-footer"><a href="/auth/login">Back to sign in</a></p>
+    </div>
+</div>
+<%- include('partials/auth-layout-end') %>

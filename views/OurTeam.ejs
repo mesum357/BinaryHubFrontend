@@ -12,6 +12,7 @@
     
     <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/site-nav-user.css">
 
     <style>
         :root {
@@ -792,9 +793,11 @@
             </li>
             <li><a href="/services">Services</a></li>
             <li><a href="/internships">Internships</a></li>
+            <%- include('partials/nav-user-slot') %>
         </ul>
         <div class="mobile-toggle" id="mobileToggle"><i class="fas fa-bars"></i></div>
     </nav>
+    <%- include('partials/nav-user-modals') %>
 
     <main>
         <!-- Hero Section -->

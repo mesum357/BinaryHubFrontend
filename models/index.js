@@ -1,4 +1,6 @@
 module.exports = {
+  User: require('./User'),
+  Notification: require('./Notification'),
   AdminUser: require('./AdminUser'),
   TeamMember: require('./TeamMember'),
   Course: require('./Course'),

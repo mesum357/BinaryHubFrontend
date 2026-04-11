@@ -11,6 +11,7 @@ const paymentRequestSchema = new mongoose.Schema({
   amount: { type: Number, default: 0 },
   status: { type: String, enum: ['pending', 'approved', 'rejected'], default: 'pending' },
   course: { type: mongoose.Schema.Types.ObjectId, ref: 'Course' },
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null },
   courseName: { type: String, default: '' },
   education: { type: String, default: '' },
   city: { type: String, default: '' }

@@ -1,0 +1,153 @@
+<% if (typeof currentUser !== 'undefined' && currentUser) { %>
+<div id="notifyModal" class="nav-modal-overlay" aria-hidden="true">
+    <div class="nav-modal-panel" role="dialog" aria-modal="true" aria-labelledby="notifyModalTitle">
+        <div class="nav-modal-head">
+            <h2 id="notifyModalTitle">Notifications</h2>
+            <button type="button" id="notifyCloseBtn" aria-label="Close">&times;</button>
+        </div>
+        <div class="nav-modal-actions">
+            <button type="button" id="notifyMarkAllBtn">Mark all as read</button>
+        </div>
+        <div id="notifyList" class="notify-list"></div>
+    </div>
+</div>
+<script>
+(function () {
+    var openBtn = document.getElementById('notifyOpenBtn');
+    var modal = document.getElementById('notifyModal');
+    var closeBtn = document.getElementById('notifyCloseBtn');
+    var listEl = document.getElementById('notifyList');
+    var markAllBtn = document.getElementById('notifyMarkAllBtn');
+    var badge = document.getElementById('navNotifyBadge');
+    var profileBtn = document.getElementById('profileOpenBtn');
+    var dropdown = document.getElementById('profileDropdown');
+    if (!openBtn || !modal) return;
+
+    function setBadge(n) {
+        if (!badge && n > 0) {
+            var b = document.createElement('span');
+            b.className = 'nav-badge';
+            b.id = 'navNotifyBadge';
+            openBtn.appendChild(b);
+            badge = b;
+        }
+        if (badge) {
+            if (n > 0) {
+                badge.textContent = n > 99 ? '99+' : String(n);
+                badge.style.display = '';
+            } else {
+                badge.remove();
+                badge = null;
+            }
+        }
+    }
+
+    function fmt(d) {
+        try {
+            return new Date(d).toLocaleString();
+        } catch (e) {
+            return '';
+        }
+    }
+
+    function renderList(items) {
+        if (!listEl) return;
+        if (!items || !items.length) {
+            listEl.innerHTML = '<div class="notify-empty">No notifications yet.</div>';
+            return;
+        }
+        listEl.innerHTML = items.map(function (n) {
+            var unread = n.read ? '' : ' unread';
+            return '<div class="notify-item' + unread + '" data-id="' + n._id + '">' +
+                '<div class="t">' + escapeHtml(n.title || '') + '</div>' +
+                '<div class="b">' + escapeHtml(n.body || '') + '</div>' +
+                '<div class="d">' + fmt(n.createdAt) + '</div></div>';
+        }).join('');
+        listEl.querySelectorAll('.notify-item').forEach(function (el) {
+            el.addEventListener('click', function () {
+                var id = el.getAttribute('data-id');
+                if (!id || el.classList.contains('read-done')) return;
+                fetch('/api/notifications/' + id + '/read', { method: 'POST', credentials: 'same-origin' })
+                    .then(function (r) { return r.json(); })
+                    .then(function (data) {
+                        if (data.unreadCount != null) setBadge(data.unreadCount);
+                        el.classList.remove('unread');
+                        el.classList.add('read-done');
+                    })
+                    .catch(function () {});
+            });
+        });
+    }
+
+    function escapeHtml(s) {
+        var d = document.createElement('div');
+        d.textContent = s;
+        return d.innerHTML;
+    }
+
+    function loadNotifications() {
+        fetch('/api/notifications', { credentials: 'same-origin' })
+            .then(function (r) { return r.json(); })
+            .then(function (data) {
+                if (data.unreadCount != null) setBadge(data.unreadCount);
+                renderList(data.notifications || []);
+            })
+            .catch(function () {
+                if (listEl) listEl.innerHTML = '<div class="notify-empty">Could not load notifications.</div>';
+            });
+    }
+
+    function openModal() {
+        modal.classList.add('is-open');
+        modal.setAttribute('aria-hidden', 'false');
+        loadNotifications();
+    }
+    function closeModal() {
+        modal.classList.remove('is-open');
+        modal.setAttribute('aria-hidden', 'true');
+    }
+
+    openBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        if (dropdown) { dropdown.hidden = true; profileBtn.setAttribute('aria-expanded', 'false'); }
+        openModal();
+    });
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', function (e) {
+        if (e.target === modal) closeModal();
+    });
+    if (markAllBtn) {
+        markAllBtn.addEventListener('click', function () {
+            fetch('/api/notifications/read-all', { method: 'POST', credentials: 'same-origin' })
+                .then(function (r) { return r.json(); })
+                .then(function () {
+                    setBadge(0);
+                    loadNotifications();
+                })
+                .catch(function () {});
+        });
+    }
+
+    if (profileBtn && dropdown) {
+        profileBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            closeModal();
+            var open = dropdown.hidden;
+            dropdown.hidden = !open;
+            profileBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        });
+        document.addEventListener('click', function () {
+            dropdown.hidden = true;
+            profileBtn.setAttribute('aria-expanded', 'false');
+        });
+        dropdown.addEventListener('click', function (e) {
+            e.stopPropagation();
+        });
+    }
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeModal();
+    });
+})();
+</script>
+<% } %>

@@ -7,6 +7,7 @@ const enrollmentSchema = new mongoose.Schema({
   education: { type: String, default: '' },
   city: { type: String, default: '' },
   course: { type: mongoose.Schema.Types.ObjectId, ref: 'Course' },
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null },
   courseName: { type: String, default: '' }
 }, { timestamps: true });
 
