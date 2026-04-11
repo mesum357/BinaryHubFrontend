@@ -8,5 +8,6 @@ module.exports = {
   Internship: require('./Internship'),
   Enrollment: require('./Enrollment'),
   InternApplication: require('./InternApplication'),
-  PaymentRequest: require('./PaymentRequest')
+  PaymentRequest: require('./PaymentRequest'),
+  PaymentSettings: require('./PaymentSettings')
 };

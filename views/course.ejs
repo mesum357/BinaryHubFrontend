@@ -814,6 +814,7 @@
         /* Payment Panel (Left) */
         .payment-panel {
             width: 38%;
+            height: 100%;
             background: linear-gradient(160deg, #0a1628 0%, #005696 100%);
             background-attachment: local;
             background-size: cover;
@@ -962,6 +963,7 @@
 
         /* Checkboxes */
         .checkbox-group { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; cursor: pointer; }
+        label.checkbox-group { margin: 0; font-weight: inherit; }
         .custom-check {
             width: 18px;
             height: 18px;
@@ -1431,40 +1433,72 @@
                         </div>
                     </div>
 
+                    <% 
+                      var ps = typeof paymentSettings !== 'undefined' && paymentSettings ? paymentSettings : {};
+                      var epNum = String(ps.easypaisaNumber || '').trim();
+                      var epTitle = String(ps.easypaisaAccountTitle || '').trim();
+                      var bName = String(ps.bankName || '').trim();
+                      var bNum = String(ps.bankAccountNumber || '').trim();
+                      var bTitle = String(ps.bankAccountTitle || '').trim();
+                      var bIban = String(ps.bankIban || '').trim();
+                      var bNotes = String(ps.additionalBankNotes || '').trim();
+                      var hasBank = !!(bName || bNum || bTitle || bIban || bNotes);
+                      var hasEp = !!(epNum || epTitle);
+                      function escAttr(s) { return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;'); }
+                    %>
+                    <% if (hasBank) { %>
                     <div class="method-card">
                         <span class="method-title">🏦 Bank Transfer</span>
-                        <div class="account-field">
+                        <% if (bName) { %><div class="account-field">
                             <label>Bank Name</label>
-                            <span class="account-value">Meezan Bank Ltd.</span>
-                        </div>
-                        <div class="account-field">
+                            <span class="account-value"><%= bName %></span>
+                        </div><% } %>
+                        <% if (bNum) { %><div class="account-field">
                             <label>Account Number</label>
                             <div class="account-value-row">
-                                <span class="account-value" id="bankAcc">1234 5678 9012 3456</span>
-                                <i class="fa-regular fa-copy copy-btn" onclick="copyText('1234 5678 9012 3456', this)"></i>
+                                <span class="account-value" id="bankAcc"><%= bNum %></span>
+                                <i class="fa-regular fa-copy copy-btn" role="button" tabindex="0" data-copy="<%= escAttr(bNum) %>" onclick="copyPaymentField(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();copyPaymentField(this);}"></i>
                             </div>
-                        </div>
-                        <div class="account-field">
-                            <label>Title</label>
-                            <span class="account-value">BINARY HUB PVT.</span>
-                        </div>
+                        </div><% } %>
+                        <% if (bTitle) { %><div class="account-field">
+                            <label>Account title</label>
+                            <span class="account-value"><%= bTitle %></span>
+                        </div><% } %>
+                        <% if (bIban) { %><div class="account-field">
+                            <label>IBAN</label>
+                            <div class="account-value-row">
+                                <span class="account-value"><%= bIban %></span>
+                                <i class="fa-regular fa-copy copy-btn" role="button" tabindex="0" data-copy="<%= escAttr(bIban) %>" onclick="copyPaymentField(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();copyPaymentField(this);}"></i>
+                            </div>
+                        </div><% } %>
+                        <% if (bNotes) { %><div class="account-field">
+                            <label>Notes</label>
+                            <span class="account-value" style="white-space:pre-wrap;"><%= bNotes %></span>
+                        </div><% } %>
                     </div>
-
+                    <% } %>
+                    <% if (hasEp) { %>
                     <div class="method-card">
                         <span class="method-title">📱 EasyPaisa</span>
-                        <div class="account-field">
+                        <% if (epNum) { %><div class="account-field">
                             <label>Mobile Number</label>
                             <div class="account-value-row">
-                                <span class="account-value">0300 1234567</span>
-                                <i class="fa-regular fa-copy copy-btn" onclick="copyText('0300 1234567', this)"></i>
+                                <span class="account-value"><%= epNum %></span>
+                                <i class="fa-regular fa-copy copy-btn" role="button" tabindex="0" data-copy="<%= escAttr(epNum) %>" onclick="copyPaymentField(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();copyPaymentField(this);}"></i>
                             </div>
-                        </div>
-                        <div class="account-field">
-                            <label>Title</label>
-                            <span class="account-value">Binary Hub HQ</span>
-                        </div>
+                        </div><% } %>
+                        <% if (epTitle) { %><div class="account-field">
+                            <label>Account title</label>
+                            <span class="account-value"><%= epTitle %></span>
+                        </div><% } %>
                     </div>
-
+                    <% } %>
+                    <% if (!hasBank && !hasEp) { %>
+                    <div class="note-box" style="margin-bottom:12px;">
+                        <i class="fa-solid fa-circle-info"></i>
+                        Payment receiving details are not configured yet. Please contact Binary Hub for how to pay, or try again later.
+                    </div>
+                    <% } %>
                     <div class="note-box">
                         <i class="fa-solid fa-triangle-exclamation"></i>
                         After payment, please upload the transaction screenshot in the form to verify your enrollment. Seats are limited.
@@ -1561,16 +1595,16 @@
 
                         <!-- Step 3 -->
                         <div class="form-step" style="margin-bottom: 0;">
-                            <div class="checkbox-group">
+                            <label class="checkbox-group">
                                 <input type="checkbox" id="terms" required>
                                 <div class="custom-check"></div>
                                 <span>I verify that the payment details provided are accurate.</span>
-                            </div>
-                            <div class="checkbox-group">
+                            </label>
+                            <label class="checkbox-group">
                                 <input type="checkbox" id="consent" required>
                                 <div class="custom-check"></div>
                                 <span>I agree to receive communications from Binary Hub regarding my course.</span>
-                            </div>
+                            </label>
                             <button type="submit" class="btn-submit" id="submitBtn">Submit Enrollment Application 🎓</button>
                             <p style="text-align: center; font-size: 0.7rem; color: #9ca3af; margin-top: 15px;">
                                 <i class="fa-solid fa-lock"></i> Your data is encrypted and secure.
@@ -1868,8 +1902,14 @@
             el.parentElement.classList.add('active');
         }
 
+        function copyPaymentField(el) {
+            const t = el && el.getAttribute('data-copy');
+            if (t) copyText(t, el);
+        }
+
         // Copy Text Function
         function copyText(text, el) {
+            if (!text || !el) return;
             navigator.clipboard.writeText(text);
             const originalClass = el.className;
             el.className = 'fa-solid fa-check';

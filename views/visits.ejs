@@ -64,7 +64,7 @@
 
         .visit-hero {
             min-height: 85vh; position: relative; display: flex; align-items: flex-end; padding: 140px 24px 80px;
-            background: url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=2035&auto=format&fit=crop') center/cover no-repeat;
+            background: linear-gradient(160deg, #0b1220 0%, #132a4a 40%, rgba(238,112,43,0.18) 100%);
         }
         .visit-hero::before {
             content: ''; position: absolute; inset: 0;
@@ -94,6 +94,14 @@
         .visit-gallery .g2, .visit-gallery .g3 { border-radius: 16px; overflow: hidden; }
         .visit-gallery img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s ease; }
         .visit-card:hover .visit-gallery img { transform: scale(1.04); }
+        .visit-ph {
+            width: 100%;
+            height: 100%;
+            min-height: 140px;
+            background: linear-gradient(145deg, #1e293b 0%, #0f172a 55%, rgba(238,112,43,0.18) 100%);
+        }
+        .visit-card:hover .visit-ph { transform: scale(1.04); transition: transform 0.7s ease; }
+        .visits-empty { text-align: center; color: var(--gray-text); padding: 48px 20px; font-size: 1rem; }
         .visit-writeup { padding: 44px 40px; display: flex; flex-direction: column; justify-content: center; }
         .visit-writeup .loc {
             display: inline-flex; align-items: center; gap: 8px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase;
@@ -189,13 +197,12 @@
                 <p>Curated stories from recent excursions — each with context, photos, and what students took away.</p>
             </div>
 
-            <% const defImg = 'https://images.unsplash.com/photo-1581092160562-40aa08d78832?q=80&w=2070&auto=format&fit=crop'; %>
             <% if (typeof visits !== 'undefined' && visits && visits.length) { visits.forEach(function(v) { const imgs = v.images || []; %>
             <article class="visit-card">
                 <div class="visit-gallery">
-                    <div class="g1"><img src="<%= imgs[0] || defImg %>" alt=""></div>
-                    <div class="g2"><img src="<%= imgs[1] || defImg %>" alt=""></div>
-                    <div class="g3"><img src="<%= imgs[2] || defImg %>" alt=""></div>
+                    <div class="g1"><% if (imgs[0]) { %><img src="<%= imgs[0] %>" alt=""><% } else { %><div class="visit-ph" aria-hidden="true"></div><% } %></div>
+                    <div class="g2"><% if (imgs[1]) { %><img src="<%= imgs[1] %>" alt=""><% } else { %><div class="visit-ph" aria-hidden="true"></div><% } %></div>
+                    <div class="g3"><% if (imgs[2]) { %><img src="<%= imgs[2] %>" alt=""><% } else { %><div class="visit-ph" aria-hidden="true"></div><% } %></div>
                 </div>
                 <div class="visit-writeup">
                     <span class="loc"><i class="fas fa-location-dot"></i> Visit</span>
@@ -204,18 +211,7 @@
                 </div>
             </article>
             <% }); } else { %>
-            <article class="visit-card">
-                <div class="visit-gallery">
-                    <div class="g1"><img src="<%= defImg %>" alt=""></div>
-                    <div class="g2"><img src="<%= defImg %>" alt=""></div>
-                    <div class="g3"><img src="<%= defImg %>" alt=""></div>
-                </div>
-                <div class="visit-writeup">
-                    <span class="loc"><i class="fas fa-location-dot"></i> Innovation District</span>
-                    <h3 class="bebas">Tech Park immersion day</h3>
-                    <p>Students shadowed DevOps and QA squads and toured partner facilities.</p>
-                </div>
-            </article>
+            <p class="visits-empty">No visits have been published yet. Check back soon.</p>
             <% } %>
         </div>
     </section>

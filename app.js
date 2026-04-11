@@ -15,7 +15,8 @@ const {
   Internship,
   Enrollment,
   InternApplication,
-  PaymentRequest
+  PaymentRequest,
+  PaymentSettings
 } = require('./models');
 const { groupTeamMembers } = require('./lib/groupTeamByDepartment');
 
@@ -81,10 +82,20 @@ app.get('/', async (req, res) => {
 });
 
 app.get('/courses', async (req, res) => {
+  const emptyPaymentSettings = {
+    easypaisaNumber: '',
+    easypaisaAccountTitle: '',
+    bankName: '',
+    bankAccountNumber: '',
+    bankAccountTitle: '',
+    bankIban: '',
+    additionalBankNotes: ''
+  };
   try {
-    const [courses, enrollmentCount] = await Promise.all([
+    const [courses, enrollmentCount, settingsDoc] = await Promise.all([
       Course.find().sort({ createdAt: -1 }).lean(),
-      Enrollment.countDocuments()
+      Enrollment.countDocuments(),
+      PaymentSettings.findOne().lean()
     ]);
     const list = courses || [];
     const categories = [...new Set(list.map((c) => c.category).filter(Boolean))];
@@ -92,14 +103,16 @@ app.get('/courses', async (req, res) => {
       courses: list,
       enrollmentCount: enrollmentCount || 0,
       courseCount: list.length,
-      trackCount: categories.length || 0
+      trackCount: categories.length || 0,
+      paymentSettings: settingsDoc ? { ...emptyPaymentSettings, ...settingsDoc } : emptyPaymentSettings
     });
   } catch (e) {
     res.render('course', {
       courses: [],
       enrollmentCount: 0,
       courseCount: 0,
-      trackCount: 0
+      trackCount: 0,
+      paymentSettings: emptyPaymentSettings
     });
   }
 });

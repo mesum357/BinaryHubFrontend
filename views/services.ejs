@@ -183,6 +183,10 @@
             position: absolute; inset: 0; background-size: cover; background-position: center;
             transition: transform 0.8s ease;
         }
+        .svc-bg.svc-bg--gradient {
+            background-image: none;
+            background: linear-gradient(145deg, #0f172a 0%, #1e3a5f 45%, rgba(238,112,43,0.25) 100%);
+        }
         .svc-card:hover .svc-bg { transform: scale(1.08); }
         .svc-body { position: relative; z-index: 2; padding: 24px; }
         .svc-icon {
@@ -198,6 +202,13 @@
         }
         .svc-card:hover .svc-cta { color: white; }
 
+        .services-empty {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 48px 20px;
+            color: var(--gray-text);
+            font-size: 1rem;
+        }
         .span-5 { grid-column: span 5; }
         .span-7 { grid-column: span 7; }
         .span-6 { grid-column: span 6; }
@@ -307,7 +318,7 @@
                     <h1 class="hero-title">WE BUILD<br><span class="gradient-text">DIGITAL</span> WORLDS</h1>
                     <p class="hero-lead">From production-ready web apps to cinematic edits and compliant books — Binary Hub delivers end-to-end creative and technical services tailored to your goals.</p>
                     <div class="hero-stats">
-                        <div><span>6</span><small>Core services</small></div>
+                        <div><span><%= (typeof services !== 'undefined' && services && services.length) ? services.length : 0 %></span><small>Core services</small></div>
                         <div><span>360°</span><small>Project support</small></div>
                         <div><span>∞</span><small>Creative scope</small></div>
                     </div>
@@ -331,9 +342,9 @@
                 </div>
 
                 <div class="bento">
-                    <% if (typeof services !== 'undefined' && services && services.length) { services.forEach(function(s, i) { const span = i === 0 ? 'span-7 row-2' : (i === 1 || i === 2 ? 'span-5' : 'span-4'); const bg = s.image || 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=2072&auto=format&fit=crop'; %>
+                    <% if (typeof services !== 'undefined' && services && services.length) { services.forEach(function(s, i) { const span = i === 0 ? 'span-7 row-2' : (i === 1 || i === 2 ? 'span-5' : 'span-4'); %>
                     <a href="/services/<%= s.slug %>" class="svc-card <%= span %>">
-                        <div class="svc-bg" style="background-image:url('<%= bg %>');"></div>
+                        <div class="svc-bg <%= s.image ? '' : 'svc-bg--gradient' %>"<% if (s.image) { %> style="background-image:url('<%= s.image %>');"<% } %>></div>
                         <div class="svc-body">
                             <div class="svc-icon"><i class="fas fa-layer-group"></i></div>
                             <h3 class="bebas"><%= s.name %></h3>
@@ -342,60 +353,7 @@
                         </div>
                     </a>
                     <% }); } else { %>
-                    <a href="/services/web-dev" class="svc-card span-7 row-2">
-                        <div class="svc-bg" style="background-image:url('https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=2072&auto=format&fit=crop');"></div>
-                        <div class="svc-body">
-                            <div class="svc-icon"><i class="fas fa-laptop-code"></i></div>
-                            <h3 class="bebas">Web Development</h3>
-                            <p>Full-stack builds, APIs, performance, and launch-ready deployments.</p>
-                            <span class="svc-cta">View outline <i class="fas fa-arrow-right"></i></span>
-                        </div>
-                    </a>
-                    <a href="/services/ai" class="svc-card span-5">
-                        <div class="svc-bg" style="background-image:url('https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=2070&auto=format&fit=crop');"></div>
-                        <div class="svc-body">
-                            <div class="svc-icon"><i class="fas fa-robot"></i></div>
-                            <h3 class="bebas">AI</h3>
-                            <p>LLM workflows, automation, and intelligent product features.</p>
-                            <span class="svc-cta">View outline <i class="fas fa-arrow-right"></i></span>
-                        </div>
-                    </a>
-                    <a href="/services/uiux" class="svc-card span-5">
-                        <div class="svc-bg" style="background-image:url('https://images.unsplash.com/photo-1561070791-2526d30994b5?q=80&w=2000&auto=format&fit=crop');"></div>
-                        <div class="svc-body">
-                            <div class="svc-icon"><i class="fas fa-bezier-curve"></i></div>
-                            <h3 class="bebas">UI / UX</h3>
-                            <p>Research, design systems, and polished interfaces users love.</p>
-                            <span class="svc-cta">View outline <i class="fas fa-arrow-right"></i></span>
-                        </div>
-                    </a>
-                    <a href="/services/graphic-design" class="svc-card span-4">
-                        <div class="svc-bg" style="background-image:url('https://images.unsplash.com/photo-1626785774573-4b799314346d?q=80&w=2071&auto=format&fit=crop');"></div>
-                        <div class="svc-body">
-                            <div class="svc-icon"><i class="fas fa-palette"></i></div>
-                            <h3 class="bebas">Graphic Designing</h3>
-                            <p>Brand identity, print, and campaign visuals.</p>
-                            <span class="svc-cta">View outline <i class="fas fa-arrow-right"></i></span>
-                        </div>
-                    </a>
-                    <a href="/services/video-editing" class="svc-card span-4">
-                        <div class="svc-bg" style="background-image:url('https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?q=80&w=2070&auto=format&fit=crop');"></div>
-                        <div class="svc-body">
-                            <div class="svc-icon"><i class="fas fa-film"></i></div>
-                            <h3 class="bebas">Video Editing</h3>
-                            <p>Story-driven cuts, motion, color, and sound design.</p>
-                            <span class="svc-cta">View outline <i class="fas fa-arrow-right"></i></span>
-                        </div>
-                    </a>
-                    <a href="/services/bookkeeping" class="svc-card span-4">
-                        <div class="svc-bg" style="background-image:url('https://images.unsplash.com/photo-1554224155-6726b3ff858f?q=80&w=2011&auto=format&fit=crop');"></div>
-                        <div class="svc-body">
-                            <div class="svc-icon"><i class="fas fa-file-invoice-dollar"></i></div>
-                            <h3 class="bebas">Bookkeeping</h3>
-                            <p>Accurate records, reconciliations, and clear reporting.</p>
-                            <span class="svc-cta">View outline <i class="fas fa-arrow-right"></i></span>
-                        </div>
-                    </a>
+                    <p class="services-empty">No services are available yet. Please check back soon.</p>
                     <% } %>
                 </div>
             </div>
