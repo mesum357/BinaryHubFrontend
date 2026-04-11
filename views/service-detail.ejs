@@ -18,7 +18,7 @@
             --gray-text: #6b7280;
             --gradient: linear-gradient(135deg, #ee702b, #005696);
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; cursor: none; }
+        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
         html { scroll-behavior: smooth; }
         body { font-family: 'Inter', sans-serif; background: var(--white); color: var(--dark); overflow-x: hidden; }
         h1, h2, h3, .bebas { font-family: 'Bebas Neue', cursive; }
@@ -26,15 +26,7 @@
             position: fixed; inset: 0; pointer-events: none; z-index: 9999; opacity: 0.03;
             background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
         }
-        #cursor-glow {
-            position: fixed; width: 300px; height: 300px;
-            background: radial-gradient(circle, rgba(238,112,43,0.12) 0%, transparent 70%);
-            border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%);
-        }
-        #cursor-dot {
-            position: fixed; width: 8px; height: 8px; background: var(--orange); border-radius: 50%;
-            pointer-events: none; z-index: 10005; transform: translate(-50%, -50%);
-        }
+        
         #scroll-progress { position: fixed; top: 0; left: 0; height: 3px; background: var(--gradient); z-index: 10001; width: 0%; }
         .container { max-width: 900px; margin: 0 auto; padding: 0 25px; }
         .container-wide { max-width: 1100px; margin: 0 auto; padding: 0 25px; }
@@ -185,8 +177,6 @@
 </head>
 <body>
     <div class="noise-overlay"></div>
-    <div id="cursor-glow"></div>
-    <div id="cursor-dot"></div>
     <div id="scroll-progress"></div>
     <div id="loader"><div class="loader-logo"><img src="/images/logo-binary.png" alt=""></div></div>
 
@@ -455,27 +445,6 @@
                 const loader = document.getElementById('loader');
                 if (loader) { loader.style.opacity = '0'; setTimeout(() => { loader.style.display = 'none'; }, 600); }
             }, 400);
-        });
-
-        const cursorGlow = document.getElementById('cursor-glow');
-        const cursorDot = document.getElementById('cursor-dot');
-        document.addEventListener('mousemove', (e) => {
-            cursorGlow.style.left = e.clientX + 'px';
-            cursorGlow.style.top = e.clientY + 'px';
-            cursorDot.style.left = e.clientX + 'px';
-            cursorDot.style.top = e.clientY + 'px';
-        });
-        document.querySelectorAll('a, button, .module-head').forEach(el => {
-            el.addEventListener('mouseenter', () => {
-                cursorGlow.style.width = '380px';
-                cursorGlow.style.height = '380px';
-                cursorDot.style.transform = 'translate(-50%,-50%) scale(2)';
-            });
-            el.addEventListener('mouseleave', () => {
-                cursorGlow.style.width = '300px';
-                cursorGlow.style.height = '300px';
-                cursorDot.style.transform = 'translate(-50%,-50%) scale(1)';
-            });
         });
 
         const navbar = document.getElementById('navbar');

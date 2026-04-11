@@ -18,7 +18,7 @@
             --gray-text: #6b7280;
             --gradient: linear-gradient(135deg, #ee702b, #005696);
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; cursor: none; }
+        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
         html { scroll-behavior: smooth; }
         body { font-family: 'Inter', sans-serif; background: #f1f5f9; color: var(--dark); overflow-x: hidden; line-height: 1.65; }
         h1, h2, h3, .bebas { font-family: 'Bebas Neue', cursive; }
@@ -26,15 +26,7 @@
             position: fixed; inset: 0; pointer-events: none; z-index: 9999; opacity: 0.03;
             background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
         }
-        #cursor-glow {
-            position: fixed; width: 300px; height: 300px;
-            background: radial-gradient(circle, rgba(238,112,43,0.1) 0%, transparent 70%);
-            border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%);
-        }
-        #cursor-dot {
-            position: fixed; width: 8px; height: 8px; background: var(--orange); border-radius: 50%;
-            pointer-events: none; z-index: 10005; transform: translate(-50%, -50%);
-        }
+        
         #scroll-progress { position: fixed; top: 0; left: 0; height: 3px; background: var(--gradient); z-index: 10001; width: 0%; }
 
         nav {
@@ -152,8 +144,6 @@
 </head>
 <body>
     <div class="noise-overlay"></div>
-    <div id="cursor-glow"></div>
-    <div id="cursor-dot"></div>
     <div id="scroll-progress"></div>
     <div id="loader"><div class="loader-logo"><img src="/images/logo-binary.png" alt=""></div></div>
 
@@ -282,15 +272,7 @@
                 if (l) { l.style.opacity = '0'; setTimeout(() => { l.style.display = 'none'; }, 600); }
             }, 450);
         });
-        const cg = document.getElementById('cursor-glow'), cd = document.getElementById('cursor-dot');
-        document.addEventListener('mousemove', (e) => {
-            cg.style.left = e.clientX + 'px'; cg.style.top = e.clientY + 'px';
-            cd.style.left = e.clientX + 'px'; cd.style.top = e.clientY + 'px';
-        });
-        document.querySelectorAll('a, button').forEach(el => {
-            el.addEventListener('mouseenter', () => { cg.style.width = '400px'; cg.style.height = '400px'; cd.style.transform = 'translate(-50%,-50%) scale(2)'; });
-            el.addEventListener('mouseleave', () => { cg.style.width = '300px'; cg.style.height = '300px'; cd.style.transform = 'translate(-50%,-50%) scale(1)'; });
-        });
+        
         const navbar = document.getElementById('navbar'), sp = document.getElementById('scroll-progress'), btt = document.getElementById('backToTop');
         window.addEventListener('scroll', () => {
             const ws = document.body.scrollTop || document.documentElement.scrollTop;

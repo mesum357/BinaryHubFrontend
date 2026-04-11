@@ -36,7 +36,6 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            cursor: none; /* Hide default for custom cursor */
         }
 
         html {
@@ -59,7 +58,7 @@
             pointer-events: none;
             z-index: 9999;
             opacity: 0.03;
-            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3仿真 %3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
         }
 
         /* Scroll Progress Bar */
@@ -97,31 +96,6 @@
 
         @keyframes logo-pop {
             to { opacity: 1; transform: scale(1); }
-        }
-
-        /* Custom Cursor */
-        #cursor-glow {
-            position: fixed;
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(238,112,43,0.15) 0%, rgba(0,86,150,0.05) 50%, transparent 70%);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9998;
-            transform: translate(-50%, -50%);
-            transition: width 0.3s, height 0.3s, background 0.3s;
-        }
-
-        #cursor-dot {
-            position: fixed;
-            width: 8px;
-            height: 8px;
-            background: var(--primary-orange);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 10005;
-            transform: translate(-50%, -50%);
-            transition: transform 0.1s ease-out, width 0.3s, height 0.3s;
         }
 
         /* Typography Helpers */
@@ -741,8 +715,6 @@
 
     <div class="noise-overlay"></div>
     <div class="scroll-progress" id="progressBar"></div>
-    <div id="cursor-glow"></div>
-    <div id="cursor-dot"></div>
 
     <!-- Navigation -->
     <nav id="navbar">
@@ -778,7 +750,7 @@
     <section class="hero" id="home">
         <!-- Slide 1 -->
         <div class="slide active">
-            <div class="slide-bg" style="background-image: url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2070&auto=format&fit=crop');"></div>
+            <div class="slide-bg" style="background-image: linear-gradient(135deg, #03070d 0%, #0a1628 40%, #005696 100%);"></div>
             <div class="slide-overlay"></div>
             <div class="hero-content">
                 <p class="hero-eyebrow">Welcome to Binary Hub</p>
@@ -789,7 +761,7 @@
         </div>
         <!-- Slide 2 -->
         <div class="slide">
-            <div class="slide-bg" style="background-image: url('https://images.unsplash.com/photo-1531297484001-80022131f5a1?q=80&w=2020&auto=format&fit=crop');"></div>
+            <div class="slide-bg" style="background-image: linear-gradient(135deg, #050b16 0%, #005696 50%, #ee702b 100%);"></div>
             <div class="slide-overlay"></div>
             <div class="hero-content">
                 <p class="hero-eyebrow">Learn & Grow</p>
@@ -800,7 +772,7 @@
         </div>
         <!-- Slide 3 -->
         <div class="slide">
-            <div class="slide-bg" style="background-image: url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2071&auto=format&fit=crop');"></div>
+            <div class="slide-bg" style="background-image: linear-gradient(135deg, #1a1f2e 0%, #ee702b 45%, #005696 100%);"></div>
             <div class="slide-overlay"></div>
             <div class="hero-content">
                 <p class="hero-eyebrow">Our Impact</p>
@@ -860,41 +832,35 @@
 
             <!-- Orbital Items with Images -->
             <div class="orbit-item">
-                <img src="https://images.unsplash.com/photo-1529390079861-591de354faf5?q=80&w=2070&auto=format&fit=crop" alt="Youth Empowerment">
                 <i class="fas fa-star"></i>
                 <span>Youth Empowerment</span>
             </div>
             <div class="orbit-item">
-                <img src="https://images.unsplash.com/photo-1523050335392-9beffa71386b?q=80&w=2070&auto=format&fit=crop" alt="Scholarships">
                 <i class="fas fa-graduation-cap"></i>
                 <span>Scholarships</span>
             </div>
             <div class="orbit-item">
-                <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=1974&auto=format&fit=crop" alt="Women Power">
                 <i class="fas fa-venus"></i>
                 <span>Women Power</span>
             </div>
             <div class="orbit-item">
-                <img src="https://images.unsplash.com/photo-1513258496099-48168024adb0?q=80&w=2070&auto=format&fit=crop" alt="Vocational">
                 <i class="fas fa-tools"></i>
                 <span>Vocational</span>
             </div>
             <div class="orbit-item">
-                <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=2070&auto=format&fit=crop" alt="Tech Ed">
                 <i class="fas fa-laptop-code"></i>
                 <span>Tech Ed</span>
             </div>
             <div class="orbit-item">
-                <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=2070&auto=format&fit=crop" alt="Outreach">
                 <i class="fas fa-hands-helping"></i>
                 <span>Outreach</span>
             </div>
         </div>
 
-        <div style="display: flex; justify-content: space-around; margin-top: 100px;" class="reveal">
-            <div><h3 style="font-size: 3rem; color: var(--primary-orange);">500+</h3><p>Students Graduated</p></div>
-            <div><h3 style="font-size: 3rem; color: var(--primary-blue);">20+</h3><p>Courses Offered</p></div>
-            <div><h3 style="font-size: 3rem; color: var(--primary-orange);">5</h3><p>Global Branches</p></div>
+        <div style="display: flex; justify-content: space-around; margin-top: 100px; flex-wrap: wrap; gap: 24px;" class="reveal">
+            <div><h3 style="font-size: 3rem; color: var(--primary-orange);"><%= typeof enrollmentCount !== 'undefined' ? enrollmentCount : 0 %></h3><p>Enrollments</p></div>
+            <div><h3 style="font-size: 3rem; color: var(--primary-blue);"><%= typeof courseCount !== 'undefined' ? courseCount : 0 %></h3><p>Courses live</p></div>
+            <div><h3 style="font-size: 3rem; color: var(--primary-orange);"><%= typeof teamMemberCount !== 'undefined' ? teamMemberCount : 0 %></h3><p>Team members</p></div>
         </div>
     </section>
 
@@ -906,94 +872,24 @@
             <a href="/services" class="btn btn-primary reveal" style="margin-top: 24px; display: inline-block;">View all services</a>
         </div>
 
+        <% const homeSvc = typeof homeServices !== 'undefined' && homeServices ? homeServices : []; %>
         <div class="service-grid">
-            <!-- Card 1 -->
+            <% if (homeSvc.length) { homeSvc.forEach(function(s) { %>
             <div class="service-card reveal">
                 <div class="card-inner">
                     <div class="card-face card-front">
-                        <div class="service-icon"><i class="fas fa-code"></i></div>
-                        <h3>Web Development</h3>
+                        <div class="service-icon"><i class="fas fa-bolt"></i></div>
+                        <h3><%= s.name %></h3>
                     </div>
                     <div class="card-face card-back">
-                        <p>Scalable, high-performance websites built with the latest frameworks.</p>
-                        <a href="/services/web-dev" class="btn btn-primary" style="margin-top: 20px; display: inline-block;">Details</a>
+                        <p><%= s.shortDescription || 'See the full services page for details.' %></p>
+                        <a href="/services/<%= s.slug %>" class="btn btn-primary" style="margin-top: 20px; display: inline-block;">Details</a>
                     </div>
                 </div>
             </div>
-            <!-- Card 2 -->
-            <div class="service-card reveal">
-                <div class="card-inner">
-                    <div class="card-face card-front">
-                        <div class="service-icon" style="color: #00d2ff;"><i class="fas fa-paint-brush"></i></div>
-                        <h3>UI/UX Design</h3>
-                    </div>
-                    <div class="card-face card-back">
-                        <p>User-centric designs that prioritize experience and conversion.</p>
-                        <a href="/services/uiux" class="btn btn-primary" style="margin-top: 20px; display: inline-block;">Details</a>
-                    </div>
-                </div>
-            </div>
-            <!-- Card 3 -->
-            <div class="service-card reveal">
-                <div class="card-inner">
-                    <div class="card-face card-front">
-                        <div class="service-icon" style="color: #ff9d00;"><i class="fas fa-robot"></i></div>
-                        <h3>AI & ML</h3>
-                    </div>
-                    <div class="card-face card-back">
-                        <p>Harness the power of Artificial Intelligence for your business.</p>
-                        <a href="/services/ai" class="btn btn-primary" style="margin-top: 20px; display: inline-block;">Details</a>
-                    </div>
-                </div>
-            </div>
-            <!-- Card 4 -->
-            <div class="service-card reveal">
-                <div class="card-inner">
-                    <div class="card-face card-front">
-                        <div class="service-icon" style="color: #ff0055;"><i class="fas fa-video"></i></div>
-                        <h3>Video Editing</h3>
-                    </div>
-                    <div class="card-face card-back">
-                        <p>Professional post-production and motion graphics.</p>
-                        <a href="/services/video-editing" class="btn btn-primary" style="margin-top: 20px; display: inline-block;">Details</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Blog Section -->
-    <section class="section-padding" id="blogs">
-        <h2 class="reveal" style="font-size: 3.5rem; text-align: center;">Latest From <span class="gradient-text">Our Blog</span></h2>
-        
-        <div class="blog-grid">
-            <div class="blog-card reveal">
-                <div class="blog-img" style="background-image: url('https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=2072&auto=format&fit=crop');"></div>
-                <div class="blog-content">
-                    <span style="background: var(--primary-orange); color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.7rem;">TECH</span>
-                    <h3 style="margin: 15px 0; color: white;">The Future of React 19</h3>
-                    <p style="color: var(--text-dim); font-size: 0.9rem;">Exploring the upcoming changes in the world's most popular UI library.</p>
-                    <a href="#" style="display:block; margin-top: 15px; color: var(--primary-orange); text-decoration: none; font-weight: bold;">Read More →</a>
-                </div>
-            </div>
-            <div class="blog-card reveal">
-                <div class="blog-img" style="background-image: url('https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=2070&auto=format&fit=crop');"></div>
-                <div class="blog-content">
-                    <span style="background: var(--primary-blue); color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.7rem;">EDUCATION</span>
-                    <h3 style="margin: 15px 0; color: white;">Why Every Teen Should Code</h3>
-                    <p style="color: var(--text-dim); font-size: 0.9rem;">Coding is more than just a job skill—it's a new way of thinking.</p>
-                    <a href="#" style="display:block; margin-top: 15px; color: var(--primary-orange); text-decoration: none; font-weight: bold;">Read More →</a>
-                </div>
-            </div>
-            <div class="blog-card reveal">
-                <div class="blog-img" style="background-image: url('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=2070&auto=format&fit=crop');"></div>
-                <div class="blog-content">
-                    <span style="background: var(--primary-orange); color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.7rem;">AI</span>
-                    <h3 style="margin: 15px 0; color: white;">AI in Creative Design</h3>
-                    <p style="color: var(--text-dim); font-size: 0.9rem;">How generative AI is helping designers work 10x faster.</p>
-                    <a href="#" style="display:block; margin-top: 15px; color: var(--primary-orange); text-decoration: none; font-weight: bold;">Read More →</a>
-                </div>
-            </div>
+            <% }); } else { %>
+            <p style="grid-column: 1 / -1; text-align: center; color: var(--text-dim); max-width: 520px; margin: 0 auto;">Add services from the admin panel, or <a href="/services" style="color: var(--primary-orange);">browse the services page</a>.</p>
+            <% } %>
         </div>
     </section>
 
@@ -1030,18 +926,15 @@
             <div class="footer-col">
                 <h4>Courses</h4>
                 <ul>
-                    <li><a href="#">Web Development</a></li>
-                    <li><a href="#">Graphic Design</a></li>
-                    <li><a href="#">Data Science</a></li>
-                    <li><a href="#">Cyber Security</a></li>
+                    <li><a href="/courses">Browse all courses</a></li>
                 </ul>
             </div>
             <div class="footer-col">
                 <h4>Contact Us</h4>
                 <ul style="color: #aaa;">
-                    <li><i class="fas fa-map-marker-alt"></i> 123 Tech Avenue, Digital City</li>
-                    <li><i class="fas fa-phone"></i> +1 (234) 567 890</li>
-                    <li><i class="fas fa-envelope"></i> hello@binaryhub.tech</li>
+                    <li><i class="fas fa-map-marker-alt"></i> Tech Zone, Karachi, PK</li>
+                    <li><i class="fas fa-phone"></i> +92 300 1234567</li>
+                    <li><i class="fas fa-envelope"></i> info@binaryhub.pk</li>
                 </ul>
             </div>
         </div>
@@ -1061,40 +954,6 @@
                     document.getElementById('loader').style.display = 'none';
                 }, 800);
             }, 1500); // Reduced delay for better UX
-        });
-
-        // Custom Cursor
-        const glow = document.getElementById('cursor-glow');
-        const dot = document.getElementById('cursor-dot');
-        
-        document.addEventListener('mousemove', (e) => {
-            const x = e.clientX;
-            const y = e.clientY;
-            
-            // Glow follows with a slight delay if desired, or instantly
-            glow.style.left = x + 'px';
-            glow.style.top = y + 'px';
-            
-            // Dot follows instantly
-            dot.style.left = x + 'px';
-            dot.style.top = y + 'px';
-        });
-
-        document.querySelectorAll('a, button, .dot, .orbit-item').forEach(el => {
-            el.addEventListener('mouseenter', () => {
-                glow.style.width = '120px';
-                glow.style.height = '120px';
-                glow.style.background = 'radial-gradient(circle, rgba(238,112,43,0.3) 0%, transparent 70%)';
-                dot.style.transform = 'translate(-50%, -50%) scale(2.5)';
-                dot.style.background = 'var(--primary-blue)';
-            });
-            el.addEventListener('mouseleave', () => {
-                glow.style.width = '300px';
-                glow.style.height = '300px';
-                glow.style.background = 'radial-gradient(circle, rgba(238,112,43,0.15) 0%, rgba(0,86,150,0.05) 50%, transparent 70%)';
-                dot.style.transform = 'translate(-50%, -50%) scale(1)';
-                dot.style.background = 'var(--primary-orange)';
-            });
         });
 
         // Sticky Navbar & Scroll Progress

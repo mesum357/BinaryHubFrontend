@@ -17,6 +17,7 @@ const {
   InternApplication,
   PaymentRequest
 } = require('./models');
+const { groupTeamMembers } = require('./lib/groupTeamByDepartment');
 
 const uploadRoot = path.join(__dirname, '..', process.env.UPLOAD_DIR || 'uploads');
 const publicUploads = '/uploads';
@@ -55,16 +56,51 @@ app.use(publicUploads, express.static(uploadRoot));
 
 const { uploadEnrollment, uploadInternApply } = require('./middleware/upload')(uploadRoot);
 
-app.get('/', (req, res) => {
-  res.render('ai_studio_code');
+app.get('/', async (req, res) => {
+  try {
+    const [enrollmentCount, courseCount, teamMemberCount, homeServices] = await Promise.all([
+      Enrollment.countDocuments(),
+      Course.countDocuments(),
+      TeamMember.countDocuments(),
+      Service.find().sort({ createdAt: -1 }).limit(6).lean()
+    ]);
+    res.render('ai_studio_code', {
+      enrollmentCount,
+      courseCount,
+      teamMemberCount,
+      homeServices: homeServices || []
+    });
+  } catch (e) {
+    res.render('ai_studio_code', {
+      enrollmentCount: 0,
+      courseCount: 0,
+      teamMemberCount: 0,
+      homeServices: []
+    });
+  }
 });
 
 app.get('/courses', async (req, res) => {
   try {
-    const courses = await Course.find().sort({ createdAt: -1 }).lean();
-    res.render('course', { courses: courses || [] });
+    const [courses, enrollmentCount] = await Promise.all([
+      Course.find().sort({ createdAt: -1 }).lean(),
+      Enrollment.countDocuments()
+    ]);
+    const list = courses || [];
+    const categories = [...new Set(list.map((c) => c.category).filter(Boolean))];
+    res.render('course', {
+      courses: list,
+      enrollmentCount: enrollmentCount || 0,
+      courseCount: list.length,
+      trackCount: categories.length || 0
+    });
   } catch (e) {
-    res.render('course', { courses: [] });
+    res.render('course', {
+      courses: [],
+      enrollmentCount: 0,
+      courseCount: 0,
+      trackCount: 0
+    });
   }
 });
 
@@ -152,9 +188,28 @@ app.post('/courses/enroll', (req, res, next) => {
 app.get('/team', async (req, res) => {
   try {
     const teamMembers = await TeamMember.find().sort({ createdAt: -1 }).lean();
-    res.render('OurTeam', { teamMembers: teamMembers || [] });
+    const list = teamMembers || [];
+    const teamByDept = groupTeamMembers(list);
+    const teamCount = list.length;
+    const deptCount = ['CEO', 'Developer', 'Designer', 'Marketer'].filter((d) => teamByDept[d].length > 0)
+      .length;
+    const ceoCount = teamByDept.CEO.length;
+    res.render('OurTeam', {
+      teamMembers: list,
+      teamByDept,
+      teamCount,
+      deptCount,
+      ceoCount
+    });
   } catch (e) {
-    res.render('OurTeam', { teamMembers: [] });
+    const empty = { CEO: [], Developer: [], Designer: [], Marketer: [], Other: [] };
+    res.render('OurTeam', {
+      teamMembers: [],
+      teamByDept: empty,
+      teamCount: 0,
+      deptCount: 0,
+      ceoCount: 0
+    });
   }
 });
 

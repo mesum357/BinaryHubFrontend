@@ -18,7 +18,7 @@
             --gray-text: #6b7280;
             --gradient: linear-gradient(135deg, #ee702b, #005696);
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; cursor: none; }
+        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
         html { scroll-behavior: smooth; }
         body { font-family: 'Inter', sans-serif; background: #fafbfc; color: var(--dark); overflow-x: hidden; line-height: 1.65; }
         h1, h2, h3, .bebas { font-family: 'Bebas Neue', cursive; }
@@ -26,15 +26,7 @@
             position: fixed; inset: 0; pointer-events: none; z-index: 9999; opacity: 0.03;
             background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
         }
-        #cursor-glow {
-            position: fixed; width: 300px; height: 300px;
-            background: radial-gradient(circle, rgba(238,112,43,0.1) 0%, transparent 70%);
-            border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%);
-        }
-        #cursor-dot {
-            position: fixed; width: 8px; height: 8px; background: var(--orange); border-radius: 50%;
-            pointer-events: none; z-index: 10005; transform: translate(-50%, -50%);
-        }
+        
         #scroll-progress { position: fixed; top: 0; left: 0; height: 3px; background: var(--gradient); z-index: 10001; width: 0%; }
         .gradient-text {
             background: var(--gradient); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
@@ -154,8 +146,6 @@
 </head>
 <body>
     <div class="noise-overlay"></div>
-    <div id="cursor-glow"></div>
-    <div id="cursor-dot"></div>
     <div id="scroll-progress"></div>
     <div id="loader"><div class="loader-logo"><img src="/images/logo-binary.png" alt=""></div></div>
 
@@ -198,58 +188,19 @@
         <div class="container">
             <div class="sec-head">
                 <h2 class="bebas">Visit us</h2>
-                <p>Addresses and hours are representative placeholders — replace with your live details anytime.</p>
+                <p>Our main location. More branches will be listed here when announced.</p>
             </div>
             <div class="branch-list">
                 <article class="branch-card">
-                    <div class="branch-img" style="background-image:url('https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2069&auto=format&fit=crop');">
+                    <div class="branch-img" style="background-image: linear-gradient(135deg, #005696, #ee702b); min-height: 220px;">
                         <span class="tag">HQ</span>
                     </div>
                     <div class="branch-body">
-                        <h3 class="bebas">Binary Head Office</h3>
-                        <p>Central administration, partner relations, and executive programs. Hosts board meetings, press briefings, and flagship cohort graduations.</p>
+                        <h3 class="bebas">Binary Hub</h3>
+                        <p>Visit or call for campus tours, admissions, and partnerships.</p>
                         <div class="branch-meta">
-                            <span><i class="fas fa-location-dot"></i> Tech Zone, Karachi</span>
-                            <span><i class="fas fa-clock"></i> Mon–Sat 9:00–18:00</span>
-                        </div>
-                    </div>
-                </article>
-                <article class="branch-card">
-                    <div class="branch-img" style="background-image:url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=2070&auto=format&fit=crop');">
-                        <span class="tag">Youth</span>
-                    </div>
-                    <div class="branch-body">
-                        <h3 class="bebas">Binary Youth Resource Center</h3>
-                        <p>Open labs, tutoring blocks, and scholarship counseling for teens. Evening access for homework clubs and weekend maker sessions.</p>
-                        <div class="branch-meta">
-                            <span><i class="fas fa-location-dot"></i> Community wing, Block B</span>
-                            <span><i class="fas fa-clock"></i> Daily 10:00–20:00</span>
-                        </div>
-                    </div>
-                </article>
-                <article class="branch-card">
-                    <div class="branch-img" style="background-image:url('https://images.unsplash.com/photo-1497366811353-6870744d04b2?q=80&w=2069&auto=format&fit=crop');">
-                        <span class="tag">Startup</span>
-                    </div>
-                    <div class="branch-body">
-                        <h3 class="bebas">Binary Hub Incubation</h3>
-                        <p>Co-working desks, mentor office hours, and demo prep for early-stage teams. Residents get credits for Binary Hub courses and design reviews.</p>
-                        <div class="branch-meta">
-                            <span><i class="fas fa-location-dot"></i> Innovation floor, 3rd level</span>
-                            <span><i class="fas fa-clock"></i> 24/7 keycard access</span>
-                        </div>
-                    </div>
-                </article>
-                <article class="branch-card">
-                    <div class="branch-img" style="background-image:url('https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?q=80&w=2070&auto=format&fit=crop');">
-                        <span class="tag">Trades</span>
-                    </div>
-                    <div class="branch-body">
-                        <h3 class="bebas">Binary Hub Vocational Center</h3>
-                        <p>Equipped workshops for electrical, welding, HVAC basics, and digital fabrication intro. Certification exams proctored on-site with partner assessors.</p>
-                        <div class="branch-meta">
-                            <span><i class="fas fa-location-dot"></i> Industrial belt, Sector 7</span>
-                            <span><i class="fas fa-clock"></i> Mon–Fri 8:00–17:00</span>
+                            <span><i class="fas fa-location-dot"></i> Tech Zone, Karachi, Pakistan</span>
+                            <span><i class="fas fa-phone"></i> +92 300 1234567</span>
                         </div>
                     </div>
                 </article>
@@ -261,7 +212,7 @@
         <div class="footer-grid">
             <div class="footer-col">
                 <a href="/"><img src="/images/logo-binary.png" alt="" style="height:52px;margin-bottom:12px;"></a>
-                <p style="color:#9ca3af;font-size:0.9rem;">Four doors, one Binary Hub.</p>
+                <p style="color:#9ca3af;font-size:0.9rem;">Binary Hub — Karachi.</p>
             </div>
             <div class="footer-col">
                 <h4>About</h4>
@@ -300,15 +251,7 @@
                 if (l) { l.style.opacity = '0'; setTimeout(() => { l.style.display = 'none'; }, 600); }
             }, 450);
         });
-        const cg = document.getElementById('cursor-glow'), cd = document.getElementById('cursor-dot');
-        document.addEventListener('mousemove', (e) => {
-            cg.style.left = e.clientX + 'px'; cg.style.top = e.clientY + 'px';
-            cd.style.left = e.clientX + 'px'; cd.style.top = e.clientY + 'px';
-        });
-        document.querySelectorAll('a, button').forEach(el => {
-            el.addEventListener('mouseenter', () => { cg.style.width = '400px'; cg.style.height = '400px'; cd.style.transform = 'translate(-50%,-50%) scale(2)'; });
-            el.addEventListener('mouseleave', () => { cg.style.width = '300px'; cg.style.height = '300px'; cd.style.transform = 'translate(-50%,-50%) scale(1)'; });
-        });
+        
         const navbar = document.getElementById('navbar'), sp = document.getElementById('scroll-progress'), btt = document.getElementById('backToTop');
         window.addEventListener('scroll', () => {
             const ws = document.body.scrollTop || document.documentElement.scrollTop;

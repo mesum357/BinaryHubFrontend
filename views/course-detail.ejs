@@ -19,14 +19,11 @@
         .mod { background:#fff; border-radius:12px; padding:16px 20px; margin-bottom:12px; box-shadow:0 4px 20px rgba(0,0,0,0.06); }
         .mod h3 { margin:0 0 10px; font-size:1rem; }
         .mod ul { margin:0; padding-left:20px; color:#374151; }
-        .enroll { background:#fff; border-radius:16px; padding:24px; margin-top:32px; box-shadow:0 8px 32px rgba(0,0,0,0.08); }
-        .enroll h2 { margin-top:0; font-size:1.2rem; }
         label { display:block; font-size:0.8rem; font-weight:600; margin:12px 0 4px; color:var(--gray); }
         input, select, textarea { width:100%; max-width:100%; padding:10px 12px; border:1px solid #e5e7eb; border-radius:8px; font-family:inherit; box-sizing:border-box; }
         textarea { min-height:60px; }
         .row2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
         @media(max-width:600px){ .row2 { grid-template-columns:1fr; } }
-        button.submit { margin-top:20px; width:100%; padding:14px; border:none; border-radius:10px; background:linear-gradient(135deg,var(--orange),var(--blue)); color:#fff; font-weight:700; cursor:pointer; font-size:1rem; }
         .flash { padding:12px; border-radius:8px; margin-bottom:16px; }
         .flash.ok { background:#dcfce7; color:#166534; }
         .flash.err { background:#fee2e2; color:#991b1b; }
@@ -49,42 +46,6 @@
             <% if (m.items && m.items.length) { %><ul><% m.items.forEach(function(it) { %><li><%= it %></li><% }); %></ul><% } %>
         </div>
         <% }); %>
-
-        <div class="enroll" id="enroll">
-            <h2>Enroll in this course</h2>
-            <form action="/courses/enroll" method="POST" enctype="multipart/form-data">
-                <input type="hidden" name="courseId" value="<%= course._id %>">
-                <input type="hidden" name="courseName" value="<%= course.name %>">
-                <input type="hidden" name="amount" value="<%= course.feeAmount != null ? course.feeAmount : 5000 %>">
-                <div class="row2">
-                    <div><label>Full name *</label><input name="studentName" required></div>
-                    <div><label>Phone *</label><input name="phone" type="tel" required></div>
-                </div>
-                <label>Email *</label>
-                <input name="email" type="email" required>
-                <div class="row2">
-                    <div><label>Education</label>
-                        <select name="education">
-                            <option>Matric / O-Level</option>
-                            <option>Intermediate / A-Level</option>
-                            <option selected>Bachelor's</option>
-                            <option>Master's</option>
-                        </select>
-                    </div>
-                    <div><label>City</label><input name="city" placeholder="City"></div>
-                </div>
-                <label>Payment method *</label>
-                <select name="payType">
-                    <option value="bank">Bank</option>
-                    <option value="easypaisa">EasyPaisa</option>
-                </select>
-                <label>Transaction ID *</label>
-                <input name="transactionId" required>
-                <label>Screenshot *</label>
-                <input type="file" name="screenshot" accept="image/*" required>
-                <button type="submit" class="submit">Submit enrollment</button>
-            </form>
-        </div>
     </div>
 </body>
 </html>

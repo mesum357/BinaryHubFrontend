@@ -32,7 +32,6 @@
             padding: 0;
             box-sizing: border-box;
             outline: none;
-            cursor: none;
         }
 
         html {
@@ -60,31 +59,6 @@
 
         h1, h2, h3, .bebas { font-family: 'Bebas Neue', cursive; }
         .space-grotesk { font-family: 'Space Grotesk', sans-serif; }
-
-        /* Custom Cursor */
-        #cursor-glow {
-            position: fixed;
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(238,112,43,0.15) 0%, rgba(0,86,150,0.05) 50%, transparent 70%);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9998;
-            transform: translate(-50%, -50%);
-            transition: width 0.3s, height 0.3s, background 0.3s;
-        }
-
-        #cursor-dot {
-            position: fixed;
-            width: 8px;
-            height: 8px;
-            background: var(--orange);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 10005;
-            transform: translate(-50%, -50%);
-            transition: transform 0.1s ease-out, width 0.3s, height 0.3s;
-        }
 
         /* Grain Texture */
         .noise-overlay {
@@ -1195,8 +1169,6 @@
 <body>
 
     <div class="noise-overlay"></div>
-    <div id="cursor-glow"></div>
-    <div id="cursor-dot"></div>
     <div id="scroll-progress"></div>
 
     <!-- Loading Screen Synchronized -->
@@ -1265,18 +1237,18 @@
                     
                     <div class="stats-strip">
                         <div class="stat-item">
-                            <span class="stat-num" data-target="500">0</span>
-                            <span class="stat-label">Students</span>
+                            <span class="stat-num" data-target="<%= typeof enrollmentCount !== 'undefined' ? enrollmentCount : 0 %>">0</span>
+                            <span class="stat-label">Enrollments</span>
                         </div>
                         <div style="width: 1px; background: rgba(255,255,255,0.1);"></div>
                         <div class="stat-item">
-                            <span class="stat-num">5</span>
+                            <span class="stat-num" data-target="<%= typeof courseCount !== 'undefined' ? courseCount : 0 %>">0</span>
                             <span class="stat-label">Courses</span>
                         </div>
                         <div style="width: 1px; background: rgba(255,255,255,0.1);"></div>
                         <div class="stat-item">
-                            <span class="stat-num">3</span>
-                            <span class="stat-label">Months</span>
+                            <span class="stat-num" data-target="<%= typeof trackCount !== 'undefined' ? trackCount : 0 %>">0</span>
+                            <span class="stat-label">Tracks</span>
                         </div>
                     </div>
 
@@ -1291,7 +1263,7 @@
                         <div class="center-hub">
                             <div class="hub-ring"></div>
                             <i class="fa-solid fa-graduation-cap" style="font-size: 3rem; margin-bottom: 5px;"></i>
-                            <div style="font-family: 'Space Grotesk'; font-weight: 700;">5 COURSES</div>
+                            <div style="font-family: 'Space Grotesk'; font-weight: 700;"><%= typeof courseCount !== 'undefined' ? courseCount : 0 %> COURSES</div>
                             <div style="font-size: 0.6rem; opacity: 0.8;">AVAILABLE NOW</div>
                         </div>
                         <div class="orbit">
@@ -1371,12 +1343,12 @@
                     <p style="color: var(--gray-text);">Industry-relevant programs built for real-world success.</p>
                 </div>
 
-                <% const courseList = (typeof courses !== 'undefined' && courses && courses.length) ? courses : null; %>
+                <% const courseList = (typeof courses !== 'undefined' && courses && courses.length) ? courses : []; %>
                 <div class="grid-container" id="mainGrid">
-                    <% if (courseList) { courseList.forEach(function(c) { %>
+                    <% courseList.forEach(function(c) { %>
                     <article class="course-card" data-category="<%= c.category || 'all' %>">
                         <div class="card-banner">
-                            <img src="<%= c.image || 'https://picsum.photos/600/400?random=1' %>" alt="">
+                            <% if (c.image) { %><img src="<%= c.image %>" alt=""><% } else { %><div style="min-height:200px;background:var(--gradient-primary);"></div><% } %>
                             <div class="banner-overlay"></div>
                             <span class="duration-badge">⏱ <%= c.duration || '—' %></span>
                             <span class="category-tag">Course</span>
@@ -1398,174 +1370,11 @@
                             <button type="button" class="btn-enroll enroll-trigger" data-name="<%= c.name %>" data-id="<%= c._id %>" data-fee="<%= c.feeAmount != null ? c.feeAmount : 5000 %>">Enroll Now</button>
                         </div>
                     </article>
-                    <% }); } else { %>
-                    <!-- Web Dev Card -->
-                    <article class="course-card" data-category="development">
-                        <div class="card-ribbon">POPULAR</div>
-                        <div class="card-banner">
-                            <img src="https://picsum.photos/600/400?random=10" alt="Web Dev">
-                            <div class="banner-overlay"></div>
-                            <span class="duration-badge">⏱ 3 Months</span>
-                            <span class="category-tag">Development</span>
-                        </div>
-                        <div class="card-body">
-                            <div class="icon-row">
-                                <div class="card-icon" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8);"><i class="fa-solid fa-code"></i></div>
-                                <div class="rating">⭐ 4.9 (120+)</div>
-                            </div>
-                            <h3 class="card-title space-grotesk">Web Development</h3>
-                            <p class="card-desc">Master the art of building responsive, modern websites from scratch. Learn HTML, CSS, JavaScript, and React through hands-on projects.</p>
-                            <div class="skill-tags">
-                                <span class="skill-tag">HTML/CSS</span>
-                                <span class="skill-tag">JavaScript</span>
-                                <span class="skill-tag">React</span>
-                            </div>
-                            <hr class="card-divider">
-                            <div class="price-row">
-                                <div class="price-col">
-                                    <span>Course Fee</span>
-                                    <div class="price-now">PKR 5,000 <span class="price-old">8k</span></div>
-                                </div>
-                                <div style="font-size: 0.75rem; color: var(--gray-text);"><i class="fa-regular fa-calendar"></i> 3 Months</div>
-                            </div>
-                            <button class="btn-enroll" onclick="openEnrollModal('Web Development')">Enroll Now</button>
-                        </div>
-                    </article>
-
-                    <!-- AI Card -->
-                    <article class="course-card" data-category="ai">
-                        <div class="card-ribbon">NEW</div>
-                        <div class="card-banner">
-                            <img src="https://picsum.photos/600/400?random=20" alt="AI">
-                            <div class="banner-overlay"></div>
-                            <span class="duration-badge">⏱ 3 Months</span>
-                            <span class="category-tag">Tech</span>
-                        </div>
-                        <div class="card-body">
-                            <div class="icon-row">
-                                <div class="card-icon" style="background: linear-gradient(135deg, #a855f7, #7e22ce);"><i class="fa-solid fa-robot"></i></div>
-                                <div class="rating">⭐ 4.8 (85+)</div>
-                            </div>
-                            <h3 class="card-title space-grotesk">Artificial Intelligence</h3>
-                            <p class="card-desc">Dive into the world of AI and machine learning. Understand algorithms, build intelligent models, and apply AI solutions to real-world problems.</p>
-                            <div class="skill-tags">
-                                <span class="skill-tag">Python</span>
-                                <span class="skill-tag">ML Models</span>
-                                <span class="skill-tag">Neural Nets</span>
-                            </div>
-                            <hr class="card-divider">
-                            <div class="price-row">
-                                <div class="price-col">
-                                    <span>Course Fee</span>
-                                    <div class="price-now">PKR 5,000 <span class="price-old">10k</span></div>
-                                </div>
-                                <div style="font-size: 0.75rem; color: var(--gray-text);"><i class="fa-regular fa-calendar"></i> 3 Months</div>
-                            </div>
-                            <button class="btn-enroll" onclick="openEnrollModal('Artificial Intelligence')">Enroll Now</button>
-                        </div>
-                    </article>
-
-                    <!-- UI/UX Card -->
-                    <article class="course-card" data-category="design">
-                        <div class="card-banner">
-                            <img src="https://picsum.photos/600/400?random=30" alt="UI/UX">
-                            <div class="banner-overlay"></div>
-                            <span class="duration-badge">⏱ 3 Months</span>
-                            <span class="category-tag">Design</span>
-                        </div>
-                        <div class="card-body">
-                            <div class="icon-row">
-                                <div class="card-icon" style="background: linear-gradient(135deg, #f97316, #c2410c);"><i class="fa-solid fa-palette"></i></div>
-                                <div class="rating">⭐ 4.9 (90+)</div>
-                            </div>
-                            <h3 class="card-title space-grotesk">UI/UX Design</h3>
-                            <p class="card-desc">Learn user-centered design principles, wireframing, and prototyping with Figma. Create stunning digital experiences that delight users.</p>
-                            <div class="skill-tags">
-                                <span class="skill-tag">Figma</span>
-                                <span class="skill-tag">Prototyping</span>
-                                <span class="skill-tag">Research</span>
-                            </div>
-                            <hr class="card-divider">
-                            <div class="price-row">
-                                <div class="price-col">
-                                    <span>Course Fee</span>
-                                    <div class="price-now">PKR 5,000 <span class="price-old">7k</span></div>
-                                </div>
-                                <div style="font-size: 0.75rem; color: var(--gray-text);"><i class="fa-regular fa-calendar"></i> 3 Months</div>
-                            </div>
-                            <button class="btn-enroll" onclick="openEnrollModal('UI/UX Design')">Enroll Now</button>
-                        </div>
-                    </article>
-                <% } %>
+                    <% }); %>
+                    <% if (!courseList.length) { %>
+                    <p style="grid-column: 1 / -1; text-align: center; color: var(--gray-text); padding: 48px 16px;">No courses are published yet. Check back soon.</p>
+                    <% } %>
                 </div>
-
-                <% if (!courseList) { %>
-                <div class="grid-container-bottom" id="bottomGrid">
-                    <!-- Graphic Design -->
-                    <article class="course-card" data-category="design">
-                        <div class="card-banner">
-                            <img src="https://picsum.photos/600/400?random=40" alt="Graphic">
-                            <div class="banner-overlay"></div>
-                            <span class="duration-badge">⏱ 3 Months</span>
-                            <span class="category-tag">Creative</span>
-                        </div>
-                        <div class="card-body">
-                            <div class="icon-row">
-                                <div class="card-icon" style="background: linear-gradient(135deg, #ec4899, #be185d);"><i class="fa-solid fa-pen-nib"></i></div>
-                                <div class="rating">⭐ 4.7 (110+)</div>
-                            </div>
-                            <h3 class="card-title space-grotesk">Graphic Designing</h3>
-                            <p class="card-desc">Develop a strong visual foundation. Master Adobe Illustrator and Photoshop, brand identity design, and digital media production.</p>
-                            <div class="skill-tags">
-                                <span class="skill-tag">Illustrator</span>
-                                <span class="skill-tag">Photoshop</span>
-                                <span class="skill-tag">Branding</span>
-                            </div>
-                            <hr class="card-divider">
-                            <div class="price-row">
-                                <div class="price-col">
-                                    <span>Course Fee</span>
-                                    <div class="price-now">PKR 5,000 <span class="price-old">7k</span></div>
-                                </div>
-                                <div style="font-size: 0.75rem; color: var(--gray-text);"><i class="fa-regular fa-calendar"></i> 3 Months</div>
-                            </div>
-                            <button class="btn-enroll" onclick="openEnrollModal('Graphic Designing')">Enroll Now</button>
-                        </div>
-                    </article>
-
-                    <!-- Marketing -->
-                    <article class="course-card" data-category="marketing">
-                        <div class="card-banner">
-                            <img src="https://picsum.photos/600/400?random=50" alt="Marketing">
-                            <div class="banner-overlay"></div>
-                            <span class="duration-badge">⏱ 3 Months</span>
-                            <span class="category-tag">Business</span>
-                        </div>
-                        <div class="card-body">
-                            <div class="icon-row">
-                                <div class="card-icon" style="background: linear-gradient(135deg, #10b981, #047857);"><i class="fa-solid fa-bullhorn"></i></div>
-                                <div class="rating">⭐ 4.8 (70+)</div>
-                            </div>
-                            <h3 class="card-title space-grotesk">Digital Marketing</h3>
-                            <p class="card-desc">Learn to grow brands online using SEO, social media marketing, Google Ads, and analytics. Build data-driven marketing strategies.</p>
-                            <div class="skill-tags">
-                                <span class="skill-tag">SEO</span>
-                                <span class="skill-tag">Ads</span>
-                                <span class="skill-tag">Analytics</span>
-                            </div>
-                            <hr class="card-divider">
-                            <div class="price-row">
-                                <div class="price-col">
-                                    <span>Course Fee</span>
-                                    <div class="price-now">PKR 5,000 <span class="price-old">9k</span></div>
-                                </div>
-                                <div style="font-size: 0.75rem; color: var(--gray-text);"><i class="fa-regular fa-calendar"></i> 3 Months</div>
-                            </div>
-                            <button class="btn-enroll" onclick="openEnrollModal('Digital Marketing')">Enroll Now</button>
-                        </div>
-                    </article>
-                </div>
-                <% } %>
             </div>
         </section>
 
@@ -1841,32 +1650,6 @@
                     }, 800);
                 }
             }, 1000);
-        });
-
-        // Custom Cursor Logic
-        const cursorGlow = document.getElementById('cursor-glow');
-        const cursorDot = document.getElementById('cursor-dot');
-        
-        document.addEventListener('mousemove', (e) => {
-            cursorGlow.style.left = e.clientX + 'px';
-            cursorGlow.style.top = e.clientY + 'px';
-            cursorDot.style.left = e.clientX + 'px';
-            cursorDot.style.top = e.clientY + 'px';
-        });
-
-        document.querySelectorAll('a, button, .social-btn, .social-circle, .course-card').forEach(link => {
-            link.addEventListener('mouseenter', () => {
-                cursorGlow.style.width = '450px';
-                cursorGlow.style.height = '450px';
-                cursorDot.style.transform = 'translate(-50%, -50%) scale(2.5)';
-                cursorDot.style.background = 'rgba(238,112,43,0.8)';
-            });
-            link.addEventListener('mouseleave', () => {
-                cursorGlow.style.width = '300px';
-                cursorGlow.style.height = '300px';
-                cursorDot.style.transform = 'translate(-50%, -50%) scale(1)';
-                cursorDot.style.background = 'var(--orange)';
-            });
         });
 
         // Navbar scroll effect

@@ -34,7 +34,6 @@
             padding: 0;
             box-sizing: border-box;
             outline: none;
-            cursor: none;
         }
 
         html {
@@ -71,31 +70,6 @@
             z-index: 9999;
             opacity: 0.03;
             background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-        }
-
-        /* Custom Cursor */
-        #cursor-glow {
-            position: fixed;
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(238,112,43,0.15) 0%, rgba(0,86,150,0.05) 50%, transparent 70%);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9998;
-            transform: translate(-50%, -50%);
-            transition: width 0.3s, height 0.3s, background 0.3s;
-        }
-
-        #cursor-dot {
-            position: fixed;
-            width: 8px;
-            height: 8px;
-            background: var(--orange);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 10005;
-            transform: translate(-50%, -50%);
-            transition: transform 0.1s ease-out, width 0.3s, height 0.3s;
         }
 
         /* Loading Screen */
@@ -526,10 +500,11 @@
         .ceo-img {
             width: 100px; height: 100px;
             border-radius: 50%; border: 4px solid var(--white);
-            position: absolute; bottom: 317px; left: 50%;
+            position: absolute; bottom: -50px; left: 50%;
             transform: translateX(-50%);
             box-shadow: 0 8px 30px rgba(0,0,0,0.15);
             transition: var(--transition);
+            object-fit: cover;
         }
         .ceo-card:hover .ceo-img { border-color: var(--orange); }
 
@@ -770,8 +745,6 @@
 
     <div class="noise-overlay"></div>
     <div id="scroll-progress"></div>
-    <div id="cursor-glow"></div>
-    <div id="cursor-dot"></div>
 
     <!-- Navigation Synchronized -->
     <nav id="navbar">
@@ -820,17 +793,17 @@
                 
                 <div class="stats-row">
                     <div class="stat-item">
-                        <span class="stat-num" data-target="13">0</span>
+                        <span class="stat-num" data-target="<%= typeof teamCount !== 'undefined' ? teamCount : 0 %>">0</span>
                         <span class="stat-label">Team Members</span>
                     </div>
                     <div style="width: 1px; background: rgba(255,255,255,0.2); height: 30px;"></div>
                     <div class="stat-item">
-                        <span class="stat-num" data-target="4">0</span>
+                        <span class="stat-num" data-target="<%= typeof deptCount !== 'undefined' ? deptCount : 0 %>">0</span>
                         <span class="stat-label">Departments</span>
                     </div>
                     <div style="width: 1px; background: rgba(255,255,255,0.2); height: 30px;"></div>
                     <div class="stat-item">
-                        <span class="stat-num" data-target="3">0</span>
+                        <span class="stat-num" data-target="<%= typeof ceoCount !== 'undefined' ? ceoCount : 0 %>">0</span>
                         <span class="stat-label">CEOs</span>
                     </div>
                 </div>
@@ -840,30 +813,6 @@
                 <path d="M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,149.3C672,149,768,203,864,202.7C960,203,1056,149,1152,122.7C1248,96,1344,96,1392,96L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
             </svg>
         </header>
-
-        <% if (typeof teamMembers !== 'undefined' && teamMembers && teamMembers.length) { %>
-        <section class="section-padding" style="background: var(--gray-light);">
-            <div class="container reveal">
-                <div class="section-header">
-                    <span class="header-eyebrow">Team</span>
-                    <h2 class="header-title">Binary Hub Team</h2>
-                </div>
-                <div class="team-grid">
-                    <% teamMembers.forEach(function(m) { %>
-                    <div class="designer-card reveal" style="background:#fff;border-radius:var(--radius-card);overflow:hidden;box-shadow:var(--shadow-card);">
-                        <div class="design-banner" style="background: linear-gradient(135deg, var(--orange), var(--blue)); min-height:120px; display:flex; align-items:center; justify-content:center;">
-                            <% if (m.image) { %><img src="<%= m.image %>" alt="" style="width:90px;height:90px;border-radius:50%;object-fit:cover;border:3px solid #fff;"><% } %>
-                        </div>
-                        <div class="design-body" style="padding:20px;">
-                            <h4 class="space-grotesk"><%= m.name %></h4>
-                            <span class="founder-role"><%= m.department %></span>
-                        </div>
-                    </div>
-                    <% }); %>
-                </div>
-            </div>
-        </section>
-        <% } %>
 
         <!-- Leadership / Founder Synchronized -->
         <section class="section-padding founder-sub">
@@ -901,313 +850,146 @@
             </div>
         </section>
 
+        <% const tbd = typeof teamByDept !== 'undefined' ? teamByDept : { CEO: [], Developer: [], Designer: [], Marketer: [], Other: [] }; %>
+
         <!-- CEOs -->
+        <% if (tbd.CEO.length) { %>
         <section class="section-padding">
             <div class="container reveal">
                 <div class="section-header">
                     <span class="header-eyebrow">Executive Leadership</span>
-                    <h2 class="header-title">Our Chief Executive Officers</h2>
+                    <h2 class="header-title">CEO</h2>
                 </div>
-
                 <div class="team-grid">
-                    <!-- Hussain -->
-                    <div class="ceo-card reveal">
-                        <div class="ceo-banner" style="background: linear-gradient(135deg, #005696, #003d6b);">
-                            <span class="banner-badge">Binary Hub</span>
-                        </div>
-                        <img src="https://picsum.photos/100/100?random=2" alt="Hussain Alam" class="ceo-img">
-                        <div class="ceo-body">
-                            <h3 class="ceo-name space-grotesk">Hussain Alam</h3>
-                            <span class="ceo-role">CEO — Binary Hub</span>
-                            <div class="pill pill-blue">Main Division</div>
-                            <p class="ceo-bio">Visionary leader driving Binary Hub's mission to empower youth through cutting-edge tech education.</p>
-                            <div class="social-row">
-                                <a href="#" class="social-circle"><i class="fa-brands fa-linkedin-in"></i></a>
-                                <a href="#" class="social-circle"><i class="fa-brands fa-x-twitter"></i></a>
-                                <a href="#" class="social-circle"><i class="fa-solid fa-envelope"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Rizwan -->
-                    <div class="ceo-card reveal">
-                        <div class="ceo-banner" style="background: linear-gradient(135deg, #ee702b, #c45a1e);">
-                            <span class="banner-badge">Digital Services</span>
-                        </div>
-                        <img src="https://picsum.photos/100/100?random=3" alt="Rizwan Ali" class="ceo-img">
-                        <div class="ceo-body">
-                            <h3 class="ceo-name space-grotesk">Rizwan Ali</h3>
-                            <span class="ceo-role">CEO — Binary Digital</span>
-                            <div class="pill pill-blue">Service Sector</div>
-                            <p class="ceo-bio">Spearheading digital transformation services and delivering innovative solutions for modern businesses.</p>
-                            <div class="social-row">
-                                <a href="#" class="social-circle"><i class="fa-brands fa-linkedin-in"></i></a>
-                                <a href="#" class="social-circle"><i class="fa-brands fa-x-twitter"></i></a>
-                                <a href="#" class="social-circle"><i class="fa-solid fa-envelope"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Imran Ali -->
+                    <% tbd.CEO.forEach(function(m) { %>
                     <div class="ceo-card reveal">
                         <div class="ceo-banner" style="background: linear-gradient(135deg, #005696, #ee702b);">
-                            <span class="banner-badge">BH Incubation</span>
+                            <span class="banner-badge">CEO</span>
                         </div>
-                        <img src="https://picsum.photos/100/100?random=4" alt="Imran Ali" class="ceo-img">
+                        <% if (m.image) { %>
+                        <img src="<%= m.image %>" alt="<%= m.name %>" class="ceo-img">
+                        <% } else { %>
+                        <div class="ceo-img" style="display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--orange),var(--blue));color:#fff;font-size:2rem;"><i class="fa-solid fa-user"></i></div>
+                        <% } %>
                         <div class="ceo-body">
-                            <h3 class="ceo-name space-grotesk">Imran Ali</h3>
-                            <span class="ceo-role">CEO — Incubation Center</span>
-                            <div class="pill pill-blue">Incubation</div>
-                            <p class="ceo-bio">Building the next generation of startups through Binary Hub's incubation and mentorship programs.</p>
-                            <div class="social-row">
-                                <a href="#" class="social-circle"><i class="fa-brands fa-linkedin-in"></i></a>
-                                <a href="#" class="social-circle"><i class="fa-brands fa-x-twitter"></i></a>
-                                <a href="#" class="social-circle"><i class="fa-solid fa-envelope"></i></a>
-                            </div>
+                            <h3 class="ceo-name space-grotesk"><%= m.name %></h3>
+                            <span class="ceo-role"><%= m.department %></span>
                         </div>
                     </div>
+                    <% }); %>
                 </div>
             </div>
         </section>
+        <% } %>
 
         <!-- Developers -->
+        <% if (tbd.Developer.length) { %>
         <section class="section-padding dev-sub">
             <div class="container reveal">
                 <div class="section-header">
                     <span class="header-eyebrow">Engineering</span>
                     <h2 class="header-title">Our Developers</h2>
                 </div>
-
                 <div class="team-grid">
-                    <!-- Mesum -->
+                    <% tbd.Developer.forEach(function(m) { %>
                     <div class="dev-card reveal">
                         <div class="code-bg">&lt;/&gt;</div>
                         <div class="dev-profile">
-                            <div class="dev-img-wrap"><img src="https://picsum.photos/80/80?random=5" alt="Mesum Abbas"></div>
+                            <div class="dev-img-wrap">
+                                <% if (m.image) { %><img src="<%= m.image %>" alt="<%= m.name %>"><% } else { %><div style="width:100%;height:100%;border-radius:50%;background:var(--gray-light);display:flex;align-items:center;justify-content:center;color:var(--blue);"><i class="fa-solid fa-code"></i></div><% } %>
+                            </div>
                             <div>
-                                <h4 class="space-grotesk">Mesum Abbas</h4>
-                                <span class="dev-role-badge">Full Stack Developer</span>
+                                <h4 class="space-grotesk"><%= m.name %></h4>
+                                <span class="dev-role-badge">Developer</span>
                             </div>
                         </div>
-                        <div class="skill-list">
-                            <span class="skill-tag">React</span><span class="skill-tag">Node.js</span><span class="skill-tag">MongoDB</span>
-                        </div>
-                        <div class="exp-bar-wrap">
-                            <div class="exp-label"><span>Experience</span><span>85%</span></div>
-                            <div class="exp-track"><div class="exp-fill" style="--w: 85%;"></div></div>
-                        </div>
-                        <div class="social-row">
-                            <a href="#" class="social-circle"><i class="fa-brands fa-github"></i></a>
-                            <a href="#" class="social-circle"><i class="fa-brands fa-linkedin-in"></i></a>
-                        </div>
                     </div>
-                    <!-- Farasat -->
-                    <div class="dev-card reveal">
-                        <div class="code-bg">{ }</div>
-                        <div class="dev-profile">
-                            <div class="dev-img-wrap"><img src="https://picsum.photos/80/80?random=6" alt="Farasat Ali"></div>
-                            <div>
-                                <h4 class="space-grotesk">Farasat Ali</h4>
-                                <span class="dev-role-badge">Frontend Developer</span>
-                            </div>
-                        </div>
-                        <div class="skill-list">
-                            <span class="skill-tag">Vue.js</span><span class="skill-tag">JavaScript</span><span class="skill-tag">UI</span>
-                        </div>
-                        <div class="exp-bar-wrap">
-                            <div class="exp-label"><span>Experience</span><span>78%</span></div>
-                            <div class="exp-track"><div class="exp-fill" style="--w: 78%;"></div></div>
-                        </div>
-                        <div class="social-row">
-                            <a href="#" class="social-circle"><i class="fa-brands fa-github"></i></a>
-                            <a href="#" class="social-circle"><i class="fa-brands fa-linkedin-in"></i></a>
-                        </div>
-                    </div>
-                    <!-- Tashfeen -->
-                    <div class="dev-card reveal">
-                        <div class="code-bg">[ ]</div>
-                        <div class="dev-profile">
-                            <div class="dev-img-wrap"><img src="https://picsum.photos/80/80?random=7" alt="Tashfeen Riaz"></div>
-                            <div>
-                                <h4 class="space-grotesk">Tashfeen Riaz</h4>
-                                <span class="dev-role-badge">Frontend Developer</span>
-                            </div>
-                        </div>
-                        <div class="skill-list">
-                            <span class="skill-tag">Tailwind</span><span class="skill-tag">React</span><span class="skill-tag">CSS</span>
-                        </div>
-                        <div class="exp-bar-wrap">
-                            <div class="exp-label"><span>Experience</span><span>75%</span></div>
-                            <div class="exp-track"><div class="exp-fill" style="--w: 75%;"></div></div>
-                        </div>
-                        <div class="social-row">
-                            <a href="#" class="social-circle"><i class="fa-brands fa-github"></i></a>
-                            <a href="#" class="social-circle"><i class="fa-brands fa-linkedin-in"></i></a>
-                        </div>
-                    </div>
+                    <% }); %>
                 </div>
             </div>
         </section>
+        <% } %>
 
         <!-- Designers -->
+        <% if (tbd.Designer.length) { %>
         <section class="section-padding">
             <div class="container reveal">
                 <div class="section-header">
                     <span class="header-eyebrow">Creative Studio</span>
                     <h2 class="header-title">Our Designers</h2>
                 </div>
-
                 <div class="team-grid">
-                    <!-- Sohail -->
+                    <% tbd.Designer.forEach(function(m) { %>
                     <div class="designer-card reveal">
                         <div class="design-banner" style="background: linear-gradient(135deg, #7c3aed, #005696);">
-                            <img src="https://picsum.photos/90/90?random=8" alt="Sohail Abbas" class="design-img">
+                            <% if (m.image) { %>
+                            <img src="<%= m.image %>" alt="<%= m.name %>" class="design-img">
+                            <% } else { %>
+                            <div class="design-img" style="display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.2);color:#fff;font-size:1.75rem;"><i class="fa-solid fa-palette"></i></div>
+                            <% } %>
                         </div>
                         <div class="design-body">
-                            <h4 class="space-grotesk">Sohail Abbas</h4>
-                            <span class="founder-role">🎨 UI/UX Designer</span>
-                            <div class="portfolio-strip">
-                                <div class="thumb" style="background: #7c3aed;"></div>
-                                <div class="thumb" style="background: #005696;"></div>
-                                <div class="thumb" style="background: #3b82f6;"></div>
-                            </div>
-                            <div class="social-row">
-                                <a href="#" class="social-circle"><i class="fa-brands fa-behance"></i></a>
-                                <a href="#" class="social-circle"><i class="fa-brands fa-dribbble"></i></a>
-                                <a href="#" class="social-circle"><i class="fa-brands fa-linkedin-in"></i></a>
-                            </div>
+                            <h4 class="space-grotesk"><%= m.name %></h4>
+                            <span class="founder-role">Designer</span>
                         </div>
                     </div>
-                    <!-- Arif -->
-                    <div class="designer-card reveal">
-                        <div class="design-banner" style="background: linear-gradient(135deg, #ee702b, #f43f5e);">
-                            <img src="https://picsum.photos/90/90?random=9" alt="Arif" class="design-img">
-                        </div>
-                        <div class="design-body">
-                            <h4 class="space-grotesk">Arif</h4>
-                            <span class="founder-role">✏️ Graphic Designer</span>
-                            <div class="portfolio-strip">
-                                <div class="thumb" style="background: #ee702b;"></div>
-                                <div class="thumb" style="background: #f43f5e;"></div>
-                                <div class="thumb" style="background: #fbbf24;"></div>
-                            </div>
-                            <div class="social-row">
-                                <a href="#" class="social-circle"><i class="fa-brands fa-behance"></i></a>
-                                <a href="#" class="social-circle"><i class="fa-brands fa-dribbble"></i></a>
-                                <a href="#" class="social-circle"><i class="fa-brands fa-linkedin-in"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Azhar -->
-                    <div class="designer-card reveal">
-                        <div class="design-banner" style="background: linear-gradient(135deg, #0ea5e9, #005696);">
-                            <img src="https://picsum.photos/90/90?random=10" alt="Azhar Gulvi" class="design-img">
-                        </div>
-                        <div class="design-body">
-                            <h4 class="space-grotesk">Azhar Gulvi</h4>
-                            <span class="founder-role">✏️ Graphic Designer</span>
-                            <div class="portfolio-strip">
-                                <div class="thumb" style="background: #0ea5e9;"></div>
-                                <div class="thumb" style="background: #005696;"></div>
-                                <div class="thumb" style="background: #2dd4bf;"></div>
-                            </div>
-                            <div class="social-row">
-                                <a href="#" class="social-circle"><i class="fa-brands fa-behance"></i></a>
-                                <a href="#" class="social-circle"><i class="fa-brands fa-dribbble"></i></a>
-                                <a href="#" class="social-circle"><i class="fa-brands fa-linkedin-in"></i></a>
-                            </div>
-                        </div>
-                    </div>
+                    <% }); %>
                 </div>
             </div>
         </section>
+        <% } %>
 
         <!-- Marketers -->
+        <% if (tbd.Marketer.length) { %>
         <section class="section-padding dev-sub">
             <div class="container reveal">
                 <div class="section-header">
                     <span class="header-eyebrow">Growth & Marketing</span>
                     <h2 class="header-title">Our Marketers</h2>
                 </div>
-
                 <div class="marketer-grid team-grid">
-                    <!-- Marketer 1 -->
+                    <% tbd.Marketer.forEach(function(m) { %>
                     <div class="marketer-card reveal">
                         <div class="m-profile">
-                            <img src="https://picsum.photos/72/72?random=11" alt="Imran" class="m-img" style="border: 2px solid var(--orange);">
+                            <% if (m.image) { %>
+                            <img src="<%= m.image %>" alt="<%= m.name %>" class="m-img" style="border: 2px solid var(--orange); object-fit: cover; border-radius: 50%;">
+                            <% } else { %>
+                            <div class="m-img" style="border: 2px solid var(--orange); border-radius: 50%; width: 72px; height: 72px; display: flex; align-items: center; justify-content: center; background: var(--gray-light);"><i class="fa-solid fa-bullhorn"></i></div>
+                            <% } %>
                             <div>
-                                <h4 class="space-grotesk">Imran</h4>
-                                <span style="font-size: 0.8rem; color: var(--gray-text);">Digital Marketer</span>
-                                <div class="m-status"><div class="status-dot"></div> Active</div>
+                                <h4 class="space-grotesk"><%= m.name %></h4>
+                                <span style="font-size: 0.8rem; color: var(--gray-text);">Marketer</span>
                             </div>
                         </div>
-                        <div class="m-stats">
-                            <div class="m-stat-box"><span>50+</span><label>Campaigns</label></div>
-                            <div class="m-stat-box"><span>3Yrs</span><label>Exp</label></div>
-                        </div>
-                        <div class="social-row">
-                            <a href="#" class="social-circle"><i class="fa-brands fa-linkedin-in"></i></a>
-                            <a href="#" class="social-circle"><i class="fa-brands fa-instagram"></i></a>
-                        </div>
                     </div>
-                    <!-- Marketer 2 -->
-                    <div class="marketer-card reveal">
-                        <div class="m-profile">
-                            <img src="https://picsum.photos/72/72?random=12" alt="Zaffar" class="m-img" style="border: 2px solid var(--blue);">
-                            <div>
-                                <h4 class="space-grotesk">Zaffar Hussain</h4>
-                                <span style="font-size: 0.8rem; color: var(--gray-text);">Strategist</span>
-                                <div class="m-status"><div class="status-dot"></div> Active</div>
-                            </div>
-                        </div>
-                        <div class="m-stats">
-                            <div class="m-stat-box"><span>40+</span><label>Strategies</label></div>
-                            <div class="m-stat-box"><span>4Yrs</span><label>Exp</label></div>
-                        </div>
-                        <div class="social-row">
-                            <a href="#" class="social-circle"><i class="fa-brands fa-linkedin-in"></i></a>
-                            <a href="#" class="social-circle"><i class="fa-brands fa-x-twitter"></i></a>
-                        </div>
-                    </div>
-                    <!-- Marketer 3 -->
-                    <div class="marketer-card reveal">
-                        <div class="m-profile">
-                            <img src="https://picsum.photos/72/72?random=13" alt="Naina" class="m-img" style="border: 2px solid #f43f5e;">
-                            <div>
-                                <h4 class="space-grotesk">Naina Nizam</h4>
-                                <span style="font-size: 0.8rem; color: var(--gray-text);">Media Manager</span>
-                                <div class="m-status"><div class="status-dot"></div> Active</div>
-                            </div>
-                        </div>
-                        <div class="m-stats">
-                            <div class="m-stat-box"><span>100+</span><label>Posts</label></div>
-                            <div class="m-stat-box"><span>2Yrs</span><label>Exp</label></div>
-                        </div>
-                        <div class="social-row">
-                            <a href="#" class="social-circle"><i class="fa-brands fa-instagram"></i></a>
-                            <a href="#" class="social-circle"><i class="fa-brands fa-linkedin-in"></i></a>
-                        </div>
-                    </div>
-                    <!-- Marketer 4 -->
-                    <div class="marketer-card reveal">
-                        <div class="m-profile">
-                            <img src="https://picsum.photos/72/72?random=14" alt="Imran" class="m-img" style="border: 2px solid #10b981;">
-                            <div>
-                                <h4 class="space-grotesk">Imran Ali</h4>
-                                <span style="font-size: 0.8rem; color: var(--gray-text);">SEO Specialist</span>
-                                <div class="m-status"><div class="status-dot"></div> Active</div>
-                            </div>
-                        </div>
-                        <div class="m-stats">
-                            <div class="m-stat-box"><span>200+</span><label>Keywords</label></div>
-                            <div class="m-stat-box"><span>5Yrs</span><label>Exp</label></div>
-                        </div>
-                        <div class="social-row">
-                            <a href="#" class="social-circle"><i class="fa-brands fa-google"></i></a>
-                            <a href="#" class="social-circle"><i class="fa-brands fa-linkedin-in"></i></a>
-                        </div>
-                    </div>
+                    <% }); %>
                 </div>
             </div>
         </section>
+        <% } %>
+
+        <% if (tbd.Other.length) { %>
+        <section class="section-padding">
+            <div class="container reveal">
+                <div class="section-header">
+                    <span class="header-eyebrow">Team</span>
+                    <h2 class="header-title">Other roles</h2>
+                </div>
+                <div class="team-grid">
+                    <% tbd.Other.forEach(function(m) { %>
+                    <div class="designer-card reveal">
+                        <div class="design-banner" style="background: linear-gradient(135deg, var(--orange), var(--blue)); min-height: 100px;"></div>
+                        <div class="design-body">
+                            <% if (m.image) { %><img src="<%= m.image %>" alt="" style="width:80px;height:80px;border-radius:50%;object-fit:cover;margin-bottom:12px;"><% } %>
+                            <h4 class="space-grotesk"><%= m.name %></h4>
+                            <span class="founder-role"><%= m.department %></span>
+                        </div>
+                    </div>
+                    <% }); %>
+                </div>
+            </div>
+        </section>
+        <% } %>
 
         <!-- CTA Section -->
         <section class="section-padding join-cta">
@@ -1292,32 +1074,6 @@
                     }, 800);
                 }
             }, 1000);
-        });
-
-        // Custom Cursor Logic
-        const cursorGlow = document.getElementById('cursor-glow');
-        const cursorDot = document.getElementById('cursor-dot');
-        
-        document.addEventListener('mousemove', (e) => {
-            cursorGlow.style.left = e.clientX + 'px';
-            cursorGlow.style.top = e.clientY + 'px';
-            cursorDot.style.left = e.clientX + 'px';
-            cursorDot.style.top = e.clientY + 'px';
-        });
-
-        document.querySelectorAll('a, button, .social-btn, .social-circle').forEach(link => {
-            link.addEventListener('mouseenter', () => {
-                cursorGlow.style.width = '450px';
-                cursorGlow.style.height = '450px';
-                cursorDot.style.transform = 'translate(-50%, -50%) scale(2.5)';
-                cursorDot.style.background = 'rgba(238,112,43,0.8)';
-            });
-            link.addEventListener('mouseleave', () => {
-                cursorGlow.style.width = '300px';
-                cursorGlow.style.height = '300px';
-                cursorDot.style.transform = 'translate(-50%, -50%) scale(1)';
-                cursorDot.style.background = 'var(--orange)';
-            });
         });
 
         // Navbar scroll effect
