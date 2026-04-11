@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Mission | Binary Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --orange: #ee702b;
+            --blue: #005696;
+            --dark: #0a1628;
+            --white: #ffffff;
+            --gray-light: #f5f7fa;
+            --gray-text: #6b7280;
+            --gradient: linear-gradient(135deg, #ee702b, #005696);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; cursor: none; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Inter', sans-serif; background: var(--white); color: var(--dark); overflow-x: hidden; line-height: 1.7; }
+        h1, h2, h3, .bebas { font-family: 'Bebas Neue', cursive; }
+        .noise-overlay {
+            position: fixed; inset: 0; pointer-events: none; z-index: 9999; opacity: 0.03;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+        #cursor-glow {
+            position: fixed; width: 300px; height: 300px;
+            background: radial-gradient(circle, rgba(238,112,43,0.12) 0%, transparent 70%);
+            border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%);
+        }
+        #cursor-dot {
+            position: fixed; width: 8px; height: 8px; background: var(--orange); border-radius: 50%;
+            pointer-events: none; z-index: 10005; transform: translate(-50%, -50%);
+        }
+        #scroll-progress { position: fixed; top: 0; left: 0; height: 3px; background: var(--gradient); z-index: 10001; width: 0%; }
+        .container { max-width: 900px; margin: 0 auto; padding: 0 25px; }
+        .container-wide { max-width: 1140px; margin: 0 auto; padding: 0 25px; }
+        .gradient-text {
+            background: var(--gradient); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        nav {
+            position: fixed; top: 0; width: 100%; padding: 20px 10%; display: flex; justify-content: space-between; align-items: center;
+            z-index: 10000; transition: 0.5s;
+        }
+        nav.scrolled { background: rgba(5, 11, 22, 0.9); backdrop-filter: blur(20px); padding: 15px 10%; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .logo { display: flex; align-items: center; height: 50px; }
+        .logo img { height: 100%; width: auto; }
+        nav.scrolled .logo { height: 40px; }
+        .nav-links { display: flex; gap: 28px; list-style: none; }
+        .nav-links li { position: relative; }
+        .nav-links a {
+            text-decoration: none; color: white; font-weight: 600; font-size: 0.88rem; text-transform: uppercase;
+            letter-spacing: 1px; padding-bottom: 4px;
+        }
+        .nav-links a::after {
+            content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 2px; background: var(--orange); transition: 0.3s;
+        }
+        .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+        .dropdown { position: relative; }
+        .dropdown-menu {
+            position: absolute; top: 38px; left: 0; background: rgba(255,255,255,0.97); min-width: 210px; border-radius: 12px;
+            padding: 12px 0; box-shadow: 0 14px 44px rgba(0,0,0,0.12); opacity: 0; visibility: hidden; transform: translateY(12px); transition: 0.35s;
+        }
+        .dropdown:hover .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+        .dropdown-menu a { display: block; padding: 10px 20px; font-size: 0.85rem; color: #0a1628 !important; }
+        .dropdown-menu a::after { display: none; }
+        .dropdown-menu a:hover { background: var(--gray-light); color: var(--orange) !important; }
+        .mobile-toggle { display: none; color: white; font-size: 1.5rem; z-index: 10002; }
+
+        .mission-hero {
+            min-height: 72vh; background: linear-gradient(145deg, #050b16 0%, #0f2847 55%, #1a1a2e 100%);
+            display: flex; align-items: center; justify-content: center; text-align: center; padding: 130px 24px 80px;
+            position: relative; overflow: hidden;
+        }
+        .mission-hero::before {
+            content: ''; position: absolute; width: 600px; height: 600px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(238,112,43,0.2), transparent 65%); top: -200px; right: -150px;
+        }
+        .mission-hero .wrap { position: relative; z-index: 2; max-width: 800px; }
+        .mission-hero h1 { font-size: clamp(2.8rem, 7vw, 5rem); color: white; line-height: 1.05; margin-bottom: 20px; }
+        .mission-hero .lead { color: #cbd5e1; font-size: 1.2rem; }
+
+        .mission-section { padding: 90px 0 110px; background: var(--white); }
+        .quote-block {
+            font-size: clamp(1.35rem, 2.5vw, 1.75rem); line-height: 1.55; color: var(--dark);
+            border-left: 4px solid var(--orange); padding-left: 28px; margin-bottom: 48px;
+            font-weight: 500;
+        }
+        .mission-section p { color: var(--gray-text); font-size: 1.05rem; margin-bottom: 20px; }
+        .pillars {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 48px;
+        }
+        .pillar {
+            background: var(--gray-light); border-radius: 20px; padding: 28px 24px; text-align: center;
+            border: 1px solid transparent; transition: 0.35s;
+        }
+        .pillar:hover { border-color: rgba(238,112,43,0.35); transform: translateY(-6px); box-shadow: 0 20px 50px rgba(0,86,150,0.1); }
+        .pillar i { font-size: 1.6rem; color: var(--orange); margin-bottom: 14px; }
+        .pillar h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.05rem; margin-bottom: 10px; color: var(--dark); }
+        .pillar p { font-size: 0.9rem; margin: 0; color: var(--gray-text); }
+
+        footer {
+            background: var(--dark); color: white; padding: 70px 0 28px;
+        }
+        .footer-grid { max-width: 1200px; margin: 0 auto; padding: 0 25px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 36px; margin-bottom: 44px; }
+        .footer-col h4 { color: var(--orange); font-family: 'Space Grotesk', sans-serif; margin-bottom: 16px; font-size: 1rem; }
+        .footer-col ul { list-style: none; }
+        .footer-col a { color: #9ca3af; text-decoration: none; font-size: 0.9rem; }
+        .footer-col a:hover { color: white; }
+        .footer-bottom { max-width: 1200px; margin: 0 auto; padding: 22px 25px 0; border-top: 1px solid rgba(255,255,255,0.06);
+            display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; font-size: 0.8rem; color: #6b7280;
+        }
+        #loader { position: fixed; inset: 0; background: #050b16; z-index: 10002; display: flex; align-items: center; justify-content: center; transition: opacity 0.7s; }
+        .loader-logo { width: 190px; opacity: 0; animation: lp 0.9s ease forwards; }
+        .loader-logo img { width: 100%; }
+        @keyframes lp { to { opacity: 1; } }
+        #backToTop {
+            position: fixed; bottom: 28px; right: 28px; width: 48px; height: 48px; border-radius: 50%;
+            background: var(--gradient); color: white; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; opacity: 0; visibility: hidden; transition: 0.3s; z-index: 999;
+        }
+        #backToTop.visible { opacity: 1; visibility: visible; }
+
+        @media (max-width: 900px) { .pillars { grid-template-columns: 1fr; } .footer-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 768px) {
+            .nav-links { display: none; position: fixed; top: 0; right: 0; width: 86%; max-width: 320px; height: 100vh;
+                background: #050b16; flex-direction: column; padding: 96px 26px; gap: 0; }
+            .nav-links.active { display: flex; }
+            .nav-links li { width: 100%; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
+            .dropdown-menu { position: static; opacity: 1; visibility: visible; transform: none; box-shadow: none; background: transparent; padding: 8px 0 0 12px; }
+            .dropdown-menu a { color: #cbd5e1 !important; }
+            .mobile-toggle { display: block; }
+        }
+    </style>
+</head>
+<body>
+    <div class="noise-overlay"></div>
+    <div id="cursor-glow"></div>
+    <div id="cursor-dot"></div>
+    <div id="scroll-progress"></div>
+    <div id="loader"><div class="loader-logo"><img src="logo binary.png" alt=""></div></div>
+
+    <nav id="navbar">
+        <a href="ai_studio_code.html#home" class="logo"><img src="logo binary.png" alt="Binary Hub"></a>
+        <ul class="nav-links">
+            <li><a href="ai_studio_code.html#home">Home</a></li>
+            <li class="dropdown">
+                <a href="our-mission.html" class="active">About Us <i class="fas fa-chevron-down" style="font-size:0.6rem;margin-left:5px;"></i></a>
+                <div class="dropdown-menu">
+                    <a href="OurTeam.html">Our Team</a>
+                    <a href="our-mission.html">Our Mission</a>
+                    <a href="impact.html">Our Impact</a>
+                    <a href="branches.html">Our Branches</a>
+                </div>
+            </li>
+            <li><a href="course.html">Courses</a></li>
+            <li class="dropdown">
+                <a href="events.html">Gallery <i class="fas fa-chevron-down" style="font-size:0.6rem;margin-left:5px;"></i></a>
+                <div class="dropdown-menu">
+                    <a href="events.html">Events</a>
+                    <a href="visits.html">Visits</a>
+                </div>
+            </li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="internships.html">Internships</a></li>
+        </ul>
+        <div class="mobile-toggle" id="mobileToggle"><i class="fas fa-bars"></i></div>
+    </nav>
+
+    <header class="mission-hero">
+        <div class="wrap">
+            <p style="color:var(--orange);font-weight:700;letter-spacing:4px;font-size:0.75rem;text-transform:uppercase;margin-bottom:14px;">Why we exist</p>
+            <h1 class="bebas">OUR MISSION IS<br><span class="gradient-text">ACCESS</span></h1>
+            <p class="lead">Technology should not be a privilege of place or income. Binary Hub exists to open doors — through teaching, mentorship, and real-world projects.</p>
+        </div>
+    </header>
+
+    <section class="mission-section">
+        <div class="container">
+            <blockquote class="quote-block">
+                We equip young people with digital and creative skills, connect them to opportunity, and nurture leaders who give back to their communities.
+            </blockquote>
+            <p>Binary Hub began with a simple observation: talent is everywhere, but structured pathways into tech are not. Our mission is to close that gap with rigorous, industry-aligned programs delivered in welcoming spaces — online, on campus, and through outreach.</p>
+            <p>We measure success not only by certificates, but by confidence gained, portfolios shipped, internships secured, and alumni who mentor the next cohort. Every course, event, and partnership is designed to compound that impact.</p>
+            <p>We are committed to ethical practice: transparent admissions, inclusive classrooms, and honest conversations about the responsibilities that come with building technology for others.</p>
+
+            <div class="pillars">
+                <div class="pillar">
+                    <i class="fas fa-graduation-cap"></i>
+                    <h3>Teach with depth</h3>
+                    <p>Curricula that mirror how teams actually ship — not tick-box tutorials.</p>
+                </div>
+                <div class="pillar">
+                    <i class="fas fa-handshake"></i>
+                    <h3>Bridge to industry</h3>
+                    <p>Partnerships that turn learning into interviews, briefs, and paid work.</p>
+                </div>
+                <div class="pillar">
+                    <i class="fas fa-seedling"></i>
+                    <h3>Grow leaders</h3>
+                    <p>Peer teaching, community projects, and scholarships that multiply reach.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <a href="ai_studio_code.html#home"><img src="logo binary.png" alt="" style="height:52px;margin-bottom:12px;"></a>
+                <p style="color:#9ca3af;font-size:0.9rem;">Purpose-led tech education.</p>
+            </div>
+            <div class="footer-col">
+                <h4>About</h4>
+                <ul>
+                    <li><a href="OurTeam.html">Our Team</a></li>
+                    <li><a href="our-mission.html">Our Mission</a></li>
+                    <li><a href="impact.html">Our Impact</a></li>
+                    <li><a href="branches.html">Our Branches</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Gallery</h4>
+                <ul>
+                    <li><a href="events.html">Events</a></li>
+                    <li><a href="visits.html">Visits</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Contact</h4>
+                <ul>
+                    <li style="color:#9ca3af;">info@binaryhub.pk</li>
+                    <li style="color:#9ca3af;">+92 300 1234567</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>&copy; 2026 Binary Hub</span>
+            <span>Our Mission</span>
+        </div>
+    </footer>
+    <div id="backToTop"><i class="fa-solid fa-arrow-up"></i></div>
+
+    <script>
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const l = document.getElementById('loader');
+                if (l) { l.style.opacity = '0'; setTimeout(() => { l.style.display = 'none'; }, 600); }
+            }, 450);
+        });
+        const cg = document.getElementById('cursor-glow'), cd = document.getElementById('cursor-dot');
+        document.addEventListener('mousemove', (e) => {
+            cg.style.left = e.clientX + 'px'; cg.style.top = e.clientY + 'px';
+            cd.style.left = e.clientX + 'px'; cd.style.top = e.clientY + 'px';
+        });
+        document.querySelectorAll('a, button').forEach(el => {
+            el.addEventListener('mouseenter', () => { cg.style.width = '400px'; cg.style.height = '400px'; cd.style.transform = 'translate(-50%,-50%) scale(2)'; });
+            el.addEventListener('mouseleave', () => { cg.style.width = '300px'; cg.style.height = '300px'; cd.style.transform = 'translate(-50%,-50%) scale(1)'; });
+        });
+        const navbar = document.getElementById('navbar'), sp = document.getElementById('scroll-progress'), btt = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            const ws = document.body.scrollTop || document.documentElement.scrollTop;
+            const h = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            sp.style.width = (ws / h) * 100 + '%';
+            if (ws > 50) navbar.classList.add('scrolled'); else navbar.classList.remove('scrolled');
+            if (ws > 300) btt.classList.add('visible'); else btt.classList.remove('visible');
+        });
+        btt.onclick = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+        const mt = document.getElementById('mobileToggle'), nl = document.querySelector('.nav-links');
+        if (mt) mt.addEventListener('click', (e) => {
+            e.stopPropagation();
+            nl.classList.toggle('active');
+            const i = mt.querySelector('i');
+            if (nl.classList.contains('active')) i.classList.replace('fa-bars', 'fa-times');
+            else i.classList.replace('fa-times', 'fa-bars');
+        });
+        document.querySelectorAll('.dropdown > a').forEach(t => {
+            t.addEventListener('click', (e) => { if (window.innerWidth <= 768) { e.preventDefault(); t.parentElement.classList.toggle('open'); } });
+        });
+    </script>
+</body>
+</html>

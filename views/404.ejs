@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Not found | Binary Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body { margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; font-family: Inter, sans-serif; background: #0a1628; color: #fff; }
+        h1 { font-family: 'Bebas Neue', cursive; font-size: 4rem; margin: 0 0 8px; background: linear-gradient(135deg, #ee702b, #005696); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        p { color: #9ca3af; margin-bottom: 24px; }
+        a { color: #ee702b; font-weight: 600; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div style="text-align:center;padding:24px;">
+        <h1>404</h1>
+        <p><%= typeof message !== 'undefined' && message ? message : 'Page not found' %></p>
+        <a href="/">Back to home</a>
+    </div>
+</body>
+</html>
