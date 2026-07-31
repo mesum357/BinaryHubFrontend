@@ -1,0 +1,343 @@
+/* Courses page + enrollment modal */
+
+.course-search {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  background: var(--bh-surface);
+  border: 1px solid var(--bh-line-strong);
+  border-radius: var(--bh-radius-pill);
+  padding: 0.55rem 1rem;
+  min-width: min(280px, 100%);
+}
+
+.course-search i {
+  color: var(--bh-muted);
+  font-size: 0.85rem;
+}
+
+.course-search input {
+  border: none;
+  outline: none;
+  background: transparent;
+  width: 100%;
+  font: inherit;
+  color: var(--bh-ink);
+}
+
+.course-price-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.course-price-label {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--bh-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.course-price {
+  font-family: var(--bh-display);
+  font-size: 1.25rem;
+  letter-spacing: -0.02em;
+}
+
+.course-outline-link {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--bh-accent);
+}
+
+.home-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+}
+
+.home-stat {
+  background: var(--bh-surface);
+  border: 1px solid var(--bh-line);
+  border-radius: var(--bh-radius);
+  padding: 1rem 1.1rem;
+  box-shadow: var(--bh-shadow-sm);
+  text-align: center;
+}
+
+.home-stat .num {
+  font-family: var(--bh-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.home-stat .lbl {
+  font-size: 0.8rem;
+  color: var(--bh-muted);
+}
+
+/* Modal */
+.enroll-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: rgba(18, 21, 26, 0.45);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.35s var(--bh-ease), visibility 0.35s;
+}
+
+.enroll-overlay.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.enroll-modal {
+  width: min(980px, 100%);
+  max-height: min(92vh, 900px);
+  overflow: auto;
+  background: var(--bh-surface);
+  border-radius: var(--bh-radius-lg);
+  border: 1px solid var(--bh-line);
+  box-shadow: var(--bh-shadow-lg);
+}
+
+.enroll-modal-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem 1.35rem;
+  border-bottom: 1px solid var(--bh-line);
+  position: sticky;
+  top: 0;
+  background: var(--bh-surface);
+  z-index: 1;
+}
+
+.enroll-modal-head h3 {
+  font-size: 1.35rem;
+}
+
+.enroll-close {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--bh-line);
+  background: var(--bh-surface-2);
+  font-size: 1.35rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.enroll-modal-body {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 0;
+}
+
+.enroll-pay-panel {
+  padding: 1.35rem;
+  background: var(--bh-canvas);
+  border-right: 1px solid var(--bh-line);
+}
+
+.enroll-pay-panel h4,
+.enroll-form-panel h4 {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.enroll-form-panel {
+  padding: 1.35rem;
+}
+
+.enroll-summary {
+  background: var(--bh-surface);
+  border: 1px solid var(--bh-line);
+  border-radius: var(--bh-radius);
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.enroll-summary-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.9rem;
+  padding: 0.35rem 0;
+  color: var(--bh-ink-soft);
+}
+
+.enroll-summary-row.total {
+  border-top: 1px solid var(--bh-line);
+  margin-top: 0.5rem;
+  padding-top: 0.75rem;
+  font-weight: 700;
+  color: var(--bh-ink);
+}
+
+.enroll-method {
+  background: var(--bh-surface);
+  border: 1px solid var(--bh-line);
+  border-radius: var(--bh-radius);
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.enroll-method strong {
+  display: block;
+  margin-bottom: 0.75rem;
+  font-size: 0.9rem;
+}
+
+.enroll-field {
+  margin-bottom: 0.65rem;
+}
+
+.enroll-field label {
+  display: block;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--bh-muted);
+  font-weight: 600;
+  margin-bottom: 0.2rem;
+}
+
+.enroll-field span {
+  font-size: 0.9rem;
+  font-weight: 550;
+}
+
+.enroll-copy-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.copy-btn {
+  border: 1px solid var(--bh-line);
+  background: var(--bh-surface-2);
+  border-radius: var(--bh-radius-pill);
+  padding: 0.25rem 0.65rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.enroll-note {
+  font-size: 0.82rem;
+  color: var(--bh-ink-soft);
+  background: var(--bh-surface);
+  border: 1px solid var(--bh-line);
+  border-radius: var(--bh-radius-sm);
+  padding: 0.75rem 0.85rem;
+  margin-bottom: 0.65rem;
+}
+
+.enroll-note.warn {
+  background: rgba(238, 112, 43, 0.08);
+  border-color: rgba(238, 112, 43, 0.2);
+}
+
+.enroll-radio-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--bh-ink-soft);
+  margin-bottom: 0.45rem;
+}
+
+.enroll-radios {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.65rem;
+  margin-bottom: 1rem;
+}
+
+.enroll-radio {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.75rem;
+  border: 1px solid var(--bh-line-strong);
+  border-radius: var(--bh-radius-sm);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.enroll-radio.is-active {
+  border-color: var(--bh-accent);
+  background: var(--bh-accent-soft);
+  color: var(--bh-accent);
+}
+
+.enroll-radio input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.enroll-upload {
+  position: relative;
+  border: 1px dashed var(--bh-line-strong);
+  border-radius: var(--bh-radius);
+  padding: 1.25rem;
+  text-align: center;
+  background: var(--bh-canvas);
+  margin-bottom: 1rem;
+  cursor: pointer;
+}
+
+.enroll-upload input[type="file"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.enroll-upload p {
+  font-size: 0.9rem;
+  color: var(--bh-muted);
+  pointer-events: none;
+}
+
+.enroll-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  font-size: 0.85rem;
+  color: var(--bh-ink-soft);
+  margin-bottom: 0.75rem;
+}
+
+.enroll-check input {
+  margin-top: 0.2rem;
+  width: auto;
+}
+
+@media (max-width: 860px) {
+  .enroll-modal-body {
+    grid-template-columns: 1fr;
+  }
+  .enroll-pay-panel {
+    border-right: none;
+    border-bottom: 1px solid var(--bh-line);
+  }
+  .home-stats {
+    grid-template-columns: 1fr;
+  }
+}

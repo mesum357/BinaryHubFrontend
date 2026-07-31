@@ -1,0 +1,67 @@
+<script>
+(function () {
+  var nav = document.getElementById('bhNav');
+  var toggle = document.getElementById('bhNavToggle');
+  var mobile = document.getElementById('bhNavMobile');
+
+  if (nav) {
+    var onScroll = function () {
+      if (window.scrollY > 24) nav.classList.add('is-scrolled');
+      else nav.classList.remove('is-scrolled');
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+  }
+
+  if (toggle && mobile) {
+    var panel = mobile.querySelector('.bh-nav-mobile-panel');
+    toggle.addEventListener('click', function () {
+      var open = mobile.classList.toggle('is-open');
+      toggle.classList.toggle('is-open', open);
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      mobile.setAttribute('aria-hidden', open ? 'false' : 'true');
+      document.body.style.overflow = open ? 'hidden' : '';
+    });
+    mobile.addEventListener('click', function (e) {
+      if (e.target === mobile) {
+        mobile.classList.remove('is-open');
+        toggle.classList.remove('is-open');
+        toggle.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+      }
+    });
+    if (panel) {
+      panel.querySelectorAll('a').forEach(function (a) {
+        a.addEventListener('click', function () {
+          mobile.classList.remove('is-open');
+          toggle.classList.remove('is-open');
+          document.body.style.overflow = '';
+        });
+      });
+    }
+  }
+
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.querySelectorAll('.bh-reveal').forEach(function (el) {
+      el.classList.add('is-in');
+    });
+    return;
+  }
+
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-in');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.bh-reveal').forEach(function (el) {
+    io.observe(el);
+  });
+})();
+</script>
+<% if (typeof extraJs !== 'undefined' && extraJs) { %><%- extraJs %><% } %>
+</body>
+</html>

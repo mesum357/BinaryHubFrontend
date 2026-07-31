@@ -13,7 +13,7 @@
                 <% if (p.course && p.course.slug) { %>
                 <div><a href="/courses/<%= p.course.slug %>" style="color:var(--auth-orange);font-size:0.85rem;text-decoration:none;">View course</a></div>
                 <% } %>
-                <div style="color:var(--auth-muted);font-size:0.8rem;margin-top:6px;">PKR <%= p.amount != null ? p.amount : '—' %> · <%= p.transactionId || '—' %></div>
+                <div style="color:var(--auth-muted);font-size:0.8rem;margin-top:6px;">PKR <%= p.amount != null ? p.amount : '-' %> · <%= p.transactionId || '-' %></div>
             </div>
             <span class="purchase-status <%= p.status %>"><%= p.status %></span>
         </div>

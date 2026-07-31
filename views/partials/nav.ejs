@@ -1,0 +1,61 @@
+<% var activeNav = typeof activeNav !== 'undefined' ? activeNav : ''; %>
+<div class="bh-nav-wrap">
+    <nav class="bh-nav" id="bhNav" aria-label="Primary">
+        <a href="/" class="bh-nav-logo">
+            <img src="/images/logo-binary.png" alt="Binary Hub">
+        </a>
+        <ul class="bh-nav-links">
+            <li><a href="/" class="<%= activeNav === 'home' ? 'is-active' : '' %>">Home</a></li>
+            <li>
+                <div class="bh-nav-drop">
+                    <button type="button" aria-haspopup="true">About</button>
+                    <div class="bh-nav-drop-menu" role="menu">
+                        <a href="/our-mission">Our mission</a>
+                        <a href="/team">Our team</a>
+                        <a href="/impact">Our impact</a>
+                        <a href="/branches">Branches</a>
+                    </div>
+                </div>
+            </li>
+            <li><a href="/courses" class="<%= activeNav === 'courses' ? 'is-active' : '' %>">Courses</a></li>
+            <li>
+                <div class="bh-nav-drop">
+                    <button type="button" aria-haspopup="true">Gallery</button>
+                    <div class="bh-nav-drop-menu" role="menu">
+                        <a href="/events">Events</a>
+                        <a href="/visits">Visits</a>
+                    </div>
+                </div>
+            </li>
+            <li><a href="/services" class="<%= activeNav === 'services' ? 'is-active' : '' %>">Services</a></li>
+            <li><a href="/internships" class="<%= activeNav === 'internships' ? 'is-active' : '' %>">Internships</a></li>
+            <%- include('nav-user-slot') %>
+        </ul>
+        <button type="button" class="bh-nav-toggle" id="bhNavToggle" aria-label="Open menu" aria-expanded="false">
+            <span></span>
+        </button>
+    </nav>
+</div>
+
+<div class="bh-nav-mobile" id="bhNavMobile" aria-hidden="true">
+    <div class="bh-nav-mobile-panel">
+        <a href="/">Home</a>
+        <a href="/our-mission">Our mission</a>
+        <a href="/team">Our team</a>
+        <a href="/impact">Our impact</a>
+        <a href="/branches">Branches</a>
+        <a href="/courses">Courses</a>
+        <a href="/events">Events</a>
+        <a href="/visits">Visits</a>
+        <a href="/services">Services</a>
+        <a href="/internships">Internships</a>
+        <% if (typeof currentUser !== 'undefined' && currentUser) { %>
+        <a href="/account/settings">Account</a>
+        <% } else { %>
+        <a href="/auth/login">Log in</a>
+        <a href="/auth/signup">Sign up</a>
+        <% } %>
+    </div>
+</div>
+
+<%- include('nav-user-modals') %>

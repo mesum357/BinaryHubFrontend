@@ -1,51 +1,69 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= course.name %> | Binary Hub</title>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root { --orange:#ee702b; --blue:#005696; --dark:#0a1628; --gray:#6b7280; --bg:#f5f7fa; }
-        body { margin:0; font-family:Inter,sans-serif; color:var(--dark); background:var(--bg); line-height:1.6; }
-        .bebas { font-family:'Bebas Neue',cursive; }
-        header { background:#050b16; color:#fff; padding:24px 6%; }
-        header a { color:#fff; text-decoration:none; opacity:0.9; }
-        .wrap { max-width:800px; margin:0 auto; padding:32px 20px 60px; }
-        h1.bebas { font-size:2.5rem; margin:0 0 8px; background:linear-gradient(135deg,var(--orange),var(--blue)); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
-        .meta { color:var(--gray); font-size:0.9rem; margin-bottom:24px; }
-        .intro { margin-bottom:28px; }
-        .mod { background:#fff; border-radius:12px; padding:16px 20px; margin-bottom:12px; box-shadow:0 4px 20px rgba(0,0,0,0.06); }
-        .mod h3 { margin:0 0 10px; font-size:1rem; }
-        .mod ul { margin:0; padding-left:20px; color:#374151; }
-        label { display:block; font-size:0.8rem; font-weight:600; margin:12px 0 4px; color:var(--gray); }
-        input, select, textarea { width:100%; max-width:100%; padding:10px 12px; border:1px solid #e5e7eb; border-radius:8px; font-family:inherit; box-sizing:border-box; }
-        textarea { min-height:60px; }
-        .row2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-        @media(max-width:600px){ .row2 { grid-template-columns:1fr; } }
-        .flash { padding:12px; border-radius:8px; margin-bottom:16px; }
-        .flash.ok { background:#dcfce7; color:#166534; }
-        .flash.err { background:#fee2e2; color:#991b1b; }
-    </style>
-</head>
-<body>
-    <header>
-        <a href="/courses"><i class="fas fa-arrow-left"></i> All courses</a>
-    </header>
-    <div class="wrap">
-        <% if (typeof successMsg !== 'undefined' && successMsg && successMsg.length) { %><div class="flash ok"><%= successMsg[0] %></div><% } %>
-        <% if (typeof errorMsg !== 'undefined' && errorMsg && errorMsg.length) { %><div class="flash err"><%= errorMsg[0] %></div><% } %>
-        <% if (course.image) { %><img src="<%= course.image %>" alt="" style="width:100%;max-height:280px;object-fit:cover;border-radius:12px;margin-bottom:20px;"><% } %>
-        <h1 class="bebas"><%= course.name %></h1>
-        <p class="meta">Duration: <%= course.duration || '—' %> · Fee: PKR <%= course.feeAmount != null ? course.feeAmount : 5000 %></p>
-        <div class="intro"><%= course.introduction || course.shortDescription || '' %></div>
-        <% (course.outline || []).forEach(function(m) { %>
-        <div class="mod">
-            <h3><%= m.title %></h3>
-            <% if (m.items && m.items.length) { %><ul><% m.items.forEach(function(it) { %><li><%= it %></li><% }); %></ul><% } %>
-        </div>
-        <% }); %>
+<%
+  pageTitle = course.name;
+  pageDescription = course.shortDescription || course.introduction || (course.name + ' course at Binary Hub');
+  activeNav = 'courses';
+  extraCss = '<link rel="stylesheet" href="/css/pages.css">';
+%>
+<%- include('partials/head') %>
+<%- include('partials/nav') %>
+
+<main>
+  <header class="bh-page-hero">
+    <div class="bh-container">
+      <p class="bh-eyebrow"><a href="/courses" style="color:inherit;text-decoration:none;">Courses</a> / <%= course.name %></p>
+      <h1><%= course.name %></h1>
+      <p class="bh-lead">Duration: <%= course.duration || 'Flexible' %> · Fee: PKR <%= course.feeAmount != null ? course.feeAmount : 5000 %></p>
     </div>
-</body>
-</html>
+  </header>
+
+  <section class="bh-section" style="padding-top:0;">
+    <div class="bh-container">
+      <% if (typeof successMsg !== 'undefined' && successMsg && successMsg.length) { %>
+      <div class="bh-flash bh-flash-ok"><%= successMsg[0] %></div>
+      <% } %>
+      <% if (typeof errorMsg !== 'undefined' && errorMsg && errorMsg.length) { %>
+      <div class="bh-flash bh-flash-err"><%= errorMsg[0] %></div>
+      <% } %>
+
+      <div class="detail-layout">
+        <div>
+          <% if (course.image) { %>
+          <div class="page-card" style="margin-bottom:1.5rem;">
+            <div class="page-card-media" style="aspect-ratio:21/9;">
+              <img src="<%= course.image %>" alt="<%= course.name %>">
+            </div>
+          </div>
+          <% } %>
+          <div class="detail-panel bh-reveal" style="margin-bottom:1.25rem;">
+            <h2>About this course</h2>
+            <p style="color:var(--bh-ink-soft);line-height:1.7;"><%= course.introduction || course.shortDescription || '' %></p>
+          </div>
+          <% (course.outline || []).forEach(function(m) { %>
+          <div class="detail-panel bh-reveal" style="margin-bottom:1rem;">
+            <h2><%= m.title %></h2>
+            <% if (m.items && m.items.length) { %>
+            <ul class="module-list">
+              <% m.items.forEach(function(it) { %><li><%= it %></li><% }); %>
+            </ul>
+            <% } %>
+          </div>
+          <% }); %>
+        </div>
+        <aside class="detail-panel bh-reveal">
+          <h2>At a glance</h2>
+          <ul class="detail-list">
+            <li><span>Duration</span><span><%= course.duration || 'Flexible' %></span></li>
+            <li><span>Fee</span><span>PKR <%= course.feeAmount != null ? course.feeAmount : 5000 %></span></li>
+            <% if (course.category) { %><li><span>Category</span><span><%= course.category %></span></li><% } %>
+          </ul>
+          <div style="margin-top:1.5rem;">
+            <a href="/courses" class="bh-btn bh-btn-primary" style="width:100%;justify-content:center;">Browse courses</a>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <%- include('partials/footer') %>
+</main>
+<%- include('partials/scripts') %>

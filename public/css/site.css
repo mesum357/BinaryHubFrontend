@@ -1,0 +1,403 @@
+/* Binary Hub site chrome: nav, footer, shared UI */
+
+/* ——— Floating island nav ——— */
+.bh-nav-wrap {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-nav);
+  padding: 0.85rem var(--bh-gutter) 0;
+  pointer-events: none;
+}
+
+.bh-nav {
+  pointer-events: auto;
+  max-width: var(--bh-max);
+  margin-inline: auto;
+  height: var(--bh-nav-h);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0 0.65rem 0 1.1rem;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid var(--bh-line);
+  border-radius: var(--bh-radius-pill);
+  box-shadow: var(--bh-shadow-md);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  transition: box-shadow var(--bh-duration) var(--bh-ease),
+    background var(--bh-duration) var(--bh-ease);
+}
+
+.bh-nav.is-scrolled {
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: var(--bh-shadow-lg);
+}
+
+.bh-nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-shrink: 0;
+  text-decoration: none;
+}
+
+.bh-nav-logo img {
+  height: 36px;
+  width: auto;
+}
+
+.bh-nav-logo span {
+  font-family: var(--bh-display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: -0.03em;
+  color: var(--bh-ink);
+}
+
+.bh-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 0.15rem;
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bh-nav-links > li > a,
+.bh-nav-links > li > .bh-nav-drop > button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--bh-radius-pill);
+  font-size: 0.875rem;
+  font-weight: 550;
+  color: var(--bh-ink-soft);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.25s var(--bh-ease), background 0.25s var(--bh-ease);
+}
+
+.bh-nav-links > li > a:hover,
+.bh-nav-links > li > a.is-active,
+.bh-nav-links > li > .bh-nav-drop > button:hover {
+  color: var(--bh-ink);
+  background: var(--bh-surface-2);
+}
+
+.bh-nav-drop {
+  position: relative;
+}
+
+.bh-nav-drop-menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  min-width: 180px;
+  padding: 0.45rem;
+  background: var(--bh-surface);
+  border: 1px solid var(--bh-line);
+  border-radius: var(--bh-radius);
+  box-shadow: var(--bh-shadow-lg);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(6px);
+  transition: opacity 0.25s var(--bh-ease), transform 0.25s var(--bh-ease), visibility 0.25s;
+  z-index: var(--z-dropdown);
+}
+
+.bh-nav-drop:hover .bh-nav-drop-menu,
+.bh-nav-drop:focus-within .bh-nav-drop-menu,
+.bh-nav-drop.is-open .bh-nav-drop-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.bh-nav-drop-menu a {
+  display: block;
+  padding: 0.55rem 0.75rem;
+  border-radius: var(--bh-radius-sm);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--bh-ink-soft);
+}
+
+.bh-nav-drop-menu a:hover {
+  background: var(--bh-surface-2);
+  color: var(--bh-ink);
+}
+
+.bh-nav-toggle {
+  display: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--bh-line);
+  background: var(--bh-surface);
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.bh-nav-toggle span,
+.bh-nav-toggle span::before,
+.bh-nav-toggle span::after {
+  display: block;
+  width: 16px;
+  height: 1.5px;
+  background: var(--bh-ink);
+  border-radius: 2px;
+  position: relative;
+  transition: transform 0.35s var(--bh-ease), opacity 0.25s;
+}
+
+.bh-nav-toggle span::before,
+.bh-nav-toggle span::after {
+  content: "";
+  position: absolute;
+  left: 0;
+}
+
+.bh-nav-toggle span::before { top: -5px; }
+.bh-nav-toggle span::after { top: 5px; }
+
+.bh-nav-toggle.is-open span {
+  background: transparent;
+}
+
+.bh-nav-toggle.is-open span::before {
+  top: 0;
+  transform: rotate(45deg);
+}
+
+.bh-nav-toggle.is-open span::after {
+  top: 0;
+  transform: rotate(-45deg);
+}
+
+/* Mobile overlay menu */
+.bh-nav-mobile {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: calc(var(--z-nav) + 5);
+  background: rgba(18, 21, 26, 0.45);
+  backdrop-filter: blur(8px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.35s var(--bh-ease), visibility 0.35s;
+}
+
+.bh-nav-mobile.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.bh-nav-mobile-panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: min(360px, 92vw);
+  height: 100%;
+  background: var(--bh-surface);
+  padding: 1.25rem;
+  transform: translateX(100%);
+  transition: transform 0.45s var(--bh-ease);
+  overflow-y: auto;
+  box-shadow: var(--bh-shadow-lg);
+}
+
+.bh-nav-mobile.is-open .bh-nav-mobile-panel {
+  transform: translateX(0);
+}
+
+.bh-nav-mobile-panel a {
+  display: block;
+  padding: 0.85rem 0.5rem;
+  border-bottom: 1px solid var(--bh-line);
+  font-weight: 550;
+  color: var(--bh-ink);
+  font-size: 1.05rem;
+}
+
+.bh-nav-mobile-panel .sub a {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--bh-ink-soft);
+  padding-left: 1rem;
+  border-bottom: none;
+}
+
+@media (max-width: 1024px) {
+  .bh-nav-links {
+    display: none;
+  }
+  .bh-nav-toggle {
+    display: inline-flex;
+  }
+  .bh-nav-mobile {
+    display: block;
+  }
+  .bh-nav {
+    padding-right: 0.65rem;
+  }
+}
+
+/* ——— Footer ——— */
+.bh-footer {
+  background: #10141b;
+  color: #d5d9e0;
+  padding: clamp(3.5rem, 8vw, 5.5rem) 0 1.75rem;
+  margin-top: 0;
+}
+
+.bh-footer-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1.1fr;
+  gap: 2.5rem;
+  margin-bottom: 3rem;
+}
+
+.bh-footer-brand img {
+  height: 42px;
+  width: auto;
+  margin-bottom: 1rem;
+  filter: brightness(0) invert(1);
+}
+
+.bh-footer-brand p {
+  color: #9aa3b2;
+  max-width: 28ch;
+  font-size: 0.95rem;
+  line-height: 1.65;
+}
+
+.bh-footer h4 {
+  color: #fff;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 1.1rem;
+  font-weight: 600;
+}
+
+.bh-footer ul li + li {
+  margin-top: 0.55rem;
+}
+
+.bh-footer a {
+  color: #9aa3b2;
+  font-size: 0.92rem;
+  transition: color 0.25s var(--bh-ease);
+}
+
+.bh-footer a:hover {
+  color: #fff;
+}
+
+.bh-footer-social {
+  display: flex;
+  gap: 0.65rem;
+  margin-top: 1.25rem;
+}
+
+.bh-footer-social a {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.bh-footer-social a:hover {
+  background: var(--bh-accent);
+  border-color: var(--bh-accent);
+}
+
+.bh-footer-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 1.35rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.75rem;
+  font-size: 0.82rem;
+  color: #7d8796;
+}
+
+@media (max-width: 900px) {
+  .bh-footer-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .bh-footer-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* CTA band */
+.bh-cta-band {
+  background:
+    radial-gradient(ellipse 60% 80% at 100% 50%, rgba(238, 112, 43, 0.25), transparent 55%),
+    radial-gradient(ellipse 50% 70% at 0% 50%, rgba(0, 86, 150, 0.22), transparent 50%),
+    #12151a;
+  color: #fff;
+  border-radius: var(--bh-radius-lg);
+  padding: clamp(2.5rem, 6vw, 4rem);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.bh-cta-band h2 {
+  color: #fff;
+  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+  max-width: 16ch;
+}
+
+.bh-cta-band p {
+  color: #b8c0cc;
+  margin-top: 0.75rem;
+  max-width: 36ch;
+}
+
+/* Trust strip */
+.bh-trust {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem 2.5rem;
+  padding: 1.5rem var(--bh-gutter);
+  border-block: 1px solid var(--bh-line);
+  background: var(--bh-surface);
+}
+
+.bh-trust span {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--bh-muted);
+  letter-spacing: 0.02em;
+}
+
+.bh-trust strong {
+  color: var(--bh-ink);
+  font-weight: 700;
+}
