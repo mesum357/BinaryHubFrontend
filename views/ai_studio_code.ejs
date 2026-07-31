@@ -36,7 +36,8 @@
                   <span class="home-preview-label">Enrollment overview</span>
                   <span class="home-preview-status"><i class="fas fa-circle"></i> Live</span>
                 </div>
-                <div class="home-preview-amount"><%= typeof enrollmentCount !== 'undefined' ? enrollmentCount : 0 %>+</div>
+                <% var enrollDisplay = Math.max(500, typeof enrollmentCount !== 'undefined' ? Number(enrollmentCount) || 0 : 0); %>
+                <div class="home-preview-amount" id="enrollOverviewCount" data-start="500" data-target="<%= enrollDisplay %>">500+</div>
                 <p class="home-preview-sub">Learners enrolled across Binary Hub programs</p>
                 <div class="home-preview-row">
                   <span>Active courses</span>
@@ -69,7 +70,7 @@
   <div class="bh-container">
     <div class="home-stats bh-reveal">
       <div class="home-stat">
-        <div class="num"><%= typeof enrollmentCount !== 'undefined' ? enrollmentCount : 0 %></div>
+        <div class="num" id="enrollStatCount" data-start="500" data-target="<%= Math.max(500, typeof enrollmentCount !== 'undefined' ? Number(enrollmentCount) || 0 : 0) %>">500</div>
         <div class="lbl">Enrollments</div>
       </div>
       <div class="home-stat">
@@ -241,4 +242,66 @@
   <%- include('partials/footer') %>
 </main>
 
+<%
+  extraJs = `
+<script>
+(function () {
+  function animateCount(el, withPlus) {
+    if (!el) return;
+    var start = parseInt(el.getAttribute('data-start'), 10);
+    var target = parseInt(el.getAttribute('data-target'), 10);
+    if (isNaN(start)) start = 500;
+    if (isNaN(target)) target = start;
+    if (target < start) target = start;
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      el.textContent = target + (withPlus ? '+' : '');
+      return;
+    }
+
+    var duration = 1200;
+    var t0 = null;
+    function frame(ts) {
+      if (!t0) t0 = ts;
+      var p = Math.min(1, (ts - t0) / duration);
+      var eased = 1 - Math.pow(1 - p, 3);
+      var val = Math.round(start + (target - start) * eased);
+      el.textContent = val + (withPlus ? '+' : '');
+      if (p < 1) requestAnimationFrame(frame);
+    }
+    el.textContent = start + (withPlus ? '+' : '');
+    requestAnimationFrame(frame);
+  }
+
+  var overview = document.getElementById('enrollOverviewCount');
+  var stat = document.getElementById('enrollStatCount');
+  var started = false;
+
+  function startCounts() {
+    if (started) return;
+    started = true;
+    animateCount(overview, true);
+    animateCount(stat, false);
+  }
+
+  if (!overview && !stat) return;
+
+  var watch = overview || stat;
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          startCounts();
+          io.disconnect();
+        }
+      });
+    }, { threshold: 0.35 });
+    io.observe(watch);
+  } else {
+    startCounts();
+  }
+})();
+</script>
+`;
+%>
 <%- include('partials/scripts') %>
